@@ -29,6 +29,12 @@ class ProfileViewContoller: UIViewController {
         super.viewWillLayoutSubviews()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+            super.viewWillAppear(animated)
+            self.tabBarController?.tabBar.isHidden = false
+            self.navigationController?.navigationBar.isHidden = true
+            }
+    
     private func setupView() {
         self.view.addSubview(self.tableView)
         

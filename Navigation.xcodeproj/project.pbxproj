@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		784F68512A711AAF000CE588 /* assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD78C4052950FD6E006D31F5 /* assets.xcassets */; };
+		78B80D3B2A7DA5F900C2A915 /* LogInViewController.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B80D3A2A7DA5F900C2A915 /* LogInViewController.swift.swift */; };
 		78BC857D2A68496300C3E9CE /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEB9659295B9D7D0066CA14 /* ProfileHeaderView.swift */; };
 		DD78C3FD2950FD6D006D31F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD78C3FC2950FD6D006D31F5 /* AppDelegate.swift */; };
 		DD78C3FF2950FD6D006D31F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD78C3FE2950FD6D006D31F5 /* SceneDelegate.swift */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		78B80D3A2A7DA5F900C2A915 /* LogInViewController.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift.swift; sourceTree = "<group>"; };
 		DD78C3F92950FD6D006D31F5 /* Navigation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Navigation.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD78C3FC2950FD6D006D31F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DD78C3FE2950FD6D006D31F5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -79,6 +81,7 @@
 			children = (
 				DDEB9659295B9D7D0066CA14 /* ProfileHeaderView.swift */,
 				DDEB965B295B9DB20066CA14 /* ProfileViewController.swift */,
+				78B80D3A2A7DA5F900C2A915 /* LogInViewController.swift.swift */,
 				DD78C4052950FD6E006D31F5 /* assets.xcassets */,
 			);
 			path = Profile;
@@ -159,6 +162,7 @@
 				DD78C4192952535F006D31F5 /* InfoViewController.swift in Sources */,
 				DD78C3FF2950FD6D006D31F5 /* SceneDelegate.swift in Sources */,
 				DDEB965C295B9DB20066CA14 /* ProfileViewController.swift in Sources */,
+				78B80D3B2A7DA5F900C2A915 /* LogInViewController.swift.swift in Sources */,
 				DD78C41529510685006D31F5 /* PostViewController.swift in Sources */,
 				78BC857D2A68496300C3E9CE /* ProfileHeaderView.swift in Sources */,
 			);
