@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let feedViewController = FeedViewController()
 
-                let profileViewController = ProfileViewContoller()
+                let profileViewController = LogInViewController()
                 profileViewController.title = "Profile"
                 profileViewController.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.circle"), tag: 1)
 
@@ -44,6 +44,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window.rootViewController = tabBarController
         window.makeKeyAndVisible()
+
+       // let viewController = LogInViewController()
+        //        let navigationController = UINavigationController(rootViewController: viewController)
+        //        window.rootViewController = navigationController
+         //       self.window = window
+
         
         self.window = window
         
