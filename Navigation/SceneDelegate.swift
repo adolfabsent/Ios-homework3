@@ -20,7 +20,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let feedViewController = FeedViewController()
 
-                let profileViewController = ProfileViewContoller()
+        let profileViewController = LogInViewController()
+
                 profileViewController.title = "Profile"
                 profileViewController.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.circle"), tag: 1)
 

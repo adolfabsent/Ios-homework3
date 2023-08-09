@@ -30,15 +30,13 @@ class ProfileViewContoller: UIViewController, UITableViewDelegate {
         setupConstraints()
         self.view.backgroundColor = .lightGray
     }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-    }
+
     
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        tableView.reloadData()
-    }
+                  super.viewWillAppear(animated)
+                  self.tabBarController?.tabBar.isHidden = false
+                  self.navigationController?.navigationBar.isHidden = true
+                  }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
