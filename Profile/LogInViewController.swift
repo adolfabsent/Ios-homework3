@@ -201,10 +201,9 @@ final class LogInViewController: UIViewController {
     }
 
     @objc func buttonClicked() {
-        let vc = ProfileViewContoller()
-
-        navigationController?.pushViewController(vc, animated: true)
-    }
+        let profileViewController = ProfileViewController()
+               navigationController?.pushViewController(profileViewController, animated: true)
+   }
 
     @objc private func keyboardWillShow(notification: NSNotification) {
             if let keybordSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {

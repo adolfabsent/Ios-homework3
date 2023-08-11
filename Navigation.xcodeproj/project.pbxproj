@@ -10,6 +10,8 @@
 		784F68512A711AAF000CE588 /* assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD78C4052950FD6E006D31F5 /* assets.xcassets */; };
 		785EB38A2A83D7BC00F752AF /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785EB3892A83D7BC00F752AF /* LogInViewController.swift */; };
 		78BC857D2A68496300C3E9CE /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEB9659295B9D7D0066CA14 /* ProfileHeaderView.swift */; };
+		78C11AEF2A84413900FF9FC9 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C11AEE2A84413900FF9FC9 /* Post.swift */; };
+		78C11AF12A844E0600FF9FC9 /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C11AF02A844E0500FF9FC9 /* PostTableViewCell.swift */; };
 		DD78C3FD2950FD6D006D31F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD78C3FC2950FD6D006D31F5 /* AppDelegate.swift */; };
 		DD78C3FF2950FD6D006D31F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD78C3FE2950FD6D006D31F5 /* SceneDelegate.swift */; };
 		DD78C41129510667006D31F5 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD78C41029510667006D31F5 /* FeedViewController.swift */; };
@@ -21,6 +23,8 @@
 
 /* Begin PBXFileReference section */
 		785EB3892A83D7BC00F752AF /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
+		78C11AEE2A84413900FF9FC9 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		78C11AF02A844E0500FF9FC9 /* PostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
 		DD78C3F92950FD6D006D31F5 /* Navigation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Navigation.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD78C3FC2950FD6D006D31F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DD78C3FE2950FD6D006D31F5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -45,6 +49,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		78C11AED2A84412300FF9FC9 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				78C11AEE2A84413900FF9FC9 /* Post.swift */,
+				78C11AF02A844E0500FF9FC9 /* PostTableViewCell.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		DD78C3F02950FD6D006D31F5 = {
 			isa = PBXGroup;
 			children = (
@@ -82,6 +95,7 @@
 				DDEB9659295B9D7D0066CA14 /* ProfileHeaderView.swift */,
 				DDEB965B295B9DB20066CA14 /* ProfileViewController.swift */,
 				785EB3892A83D7BC00F752AF /* LogInViewController.swift */,
+				78C11AED2A84412300FF9FC9 /* Model */,
 				DD78C4052950FD6E006D31F5 /* assets.xcassets */,
 			);
 			path = Profile;
@@ -156,6 +170,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				78C11AF12A844E0600FF9FC9 /* PostTableViewCell.swift in Sources */,
 				DD78C41729524D1E006D31F5 /* Struct.swift in Sources */,
 				DD78C3FD2950FD6D006D31F5 /* AppDelegate.swift in Sources */,
 				785EB38A2A83D7BC00F752AF /* LogInViewController.swift in Sources */,
@@ -165,6 +180,7 @@
 				DDEB965C295B9DB20066CA14 /* ProfileViewController.swift in Sources */,
 				DD78C41529510685006D31F5 /* PostViewController.swift in Sources */,
 				78BC857D2A68496300C3E9CE /* ProfileHeaderView.swift in Sources */,
+				78C11AEF2A84413900FF9FC9 /* Post.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
