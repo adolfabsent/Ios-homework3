@@ -1,67 +1,6 @@
 import UIKit
 import CoreData
 
-/*import Foundation
-import UIKit
-
-class ProfileViewContoller: UIViewController, UITableViewDelegate {
-    
-    private lazy var profileHeader: ProfileHeaderView = {
-        let profileHeader = ProfileHeaderView()
-        return profileHeader
-    }()
-    
-    private lazy var tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.backgroundColor = .systemGray6
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        return tableView
-    }()
-
-    private lazy var tableHeaderView: ProfileHeaderView = {
-        let view = ProfileHeaderView(frame: .zero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.tableView.tableHeaderView = tableHeaderView
-        view.addSubview(tableView)
-        view.addSubview(tableHeaderView)
-        setupConstraints()
-        self.view.backgroundColor = .lightGray
-    }
-
-    
-    override func viewWillAppear(_ animated: Bool) {
-                  super.viewWillAppear(animated)
-                  self.tabBarController?.tabBar.isHidden = false
-                  self.navigationController?.navigationBar.isHidden = true
-                  }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-    }
-    func setupConstraints() {
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-
-            tableHeaderView.topAnchor.constraint(equalTo: tableView.topAnchor),
-            tableHeaderView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
-            tableHeaderView.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
-            tableHeaderView.widthAnchor.constraint(equalTo: tableView.widthAnchor),
-            tableHeaderView.heightAnchor.constraint(equalToConstant: 220),
-            tableHeaderView.bottomAnchor.constraint(equalTo: tableView.bottomAnchor),
-        ])
-        
-    }
-}
- */
 
 class ProfileViewController : UIViewController {
 
@@ -77,145 +16,174 @@ class ProfileViewController : UIViewController {
         tableView.backgroundColor = .white
         tableView.delegate = self
         tableView.dataSource = self
-        //tableView.register(ProfileHeaderView.self, forHeaderFooterViewReuseIdentifier: "ProfileCellID")
         tableView.register(PostTableViewCell.self, forCellReuseIdentifier: "PostCellID")
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
 
-    private lazy var copyAvatar : UIImageView = {
-        let copyAvatar = UIImageView()
-        copyAvatar.image = UIImage(named: "hypno")
-        copyAvatar.clipsToBounds = true
-        copyAvatar.layer.cornerRadius = 25
-        copyAvatar.isUserInteractionEnabled = true
-        copyAvatar.isHidden = true
-        copyAvatar.translatesAutoresizingMaskIntoConstraints = false
-        return copyAvatar
+    private lazy var avatarView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.clipsToBounds = true
+        view.layer.borderWidth = 3
+        view.layer.borderColor = UIColor.white.cgColor
+        view.backgroundColor = .systemRed
+        return view
     }()
 
-    private lazy var sizeOfAvatar : CGPoint = CGPoint(x: copyAvatar.frame.size.width, y: copyAvatar.frame.size.height)
-    private lazy var spaceToAvatar : CGPoint = CGPoint(x: copyAvatar.frame.origin.x, y: copyAvatar.frame.origin.y)
-
-    private lazy var blurView : UIVisualEffectView = {
-        let blurView = UIVisualEffectView()
-        blurView.isHidden = true
-        blurView.translatesAutoresizingMaskIntoConstraints = false
-        return blurView
+    private lazy var alphaView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .white
+        return view
     }()
 
-    private lazy var closeButton : UIButton = {
-        let closeButton = UIButton()
-        closeButton.setImage(UIImage(systemName: "xmark"), for: .normal)
-        closeButton.layer.cornerRadius = 20
-        closeButton.isHidden = true
-        closeButton.clipsToBounds = true
-        closeButton.isUserInteractionEnabled = true
-        closeButton.translatesAutoresizingMaskIntoConstraints = false
-        return closeButton
+    private lazy var myImageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "cat"))
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
     }()
+
+    private lazy var closeButton: UIButton = {
+        let button = UIButton()
+        button.layer.cornerRadius = 20
+        button.alpha = 0
+        button.clipsToBounds = true
+        button.setBackgroundImage(UIImage(named: "closeButton"), for: .normal)
+        button.addTarget(self, action: #selector(self.didTapCloseButton), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    private let tapGestureRecognizer = UITapGestureRecognizer()
+    private var avatarViewCenterXConstraint: NSLayoutConstraint?
+    private var avatarViewCenterYConstraint: NSLayoutConstraint?
+    private var avatarViewHeightConstraint: NSLayoutConstraint?
+    private var avatarViewWidthConstraint: NSLayoutConstraint?
+    private var isExpanded = false
+    private let screenWidth = UIScreen.main.bounds.width
+    private let screenHeight = UIScreen.main.bounds.height
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        layout()
-
-    }
-    private func layout() {
-        #if DEBUG
-        view.backgroundColor = .red
-        #else
+        self.navigationController?.navigationBar.prefersLargeTitles = false
         view.backgroundColor = .white
-        #endif
-        view.addSubview(tableView)
-        view.addSubview(blurView)
-        view.addSubview(copyAvatar)
-        view.addSubview(closeButton)
-        setupNavBar()
-        setupConstraints()
-        avatarTapGesture()
-        closeButtonTapGesture()
+        self.setupView()
+        self.setupGesture()
+        self.setupConstraints()
+        self.setupNavigationBar()
+    }
 
-        let blurViewEffect = UIBlurEffect(style: .systemChromeMaterialLight)
-        blurView.effect = blurViewEffect
+    override func viewWillAppear(_ animated: Bool) {
+           super.viewWillAppear(animated)
+           tableView.reloadData()
+       }
+
+       override func viewDidAppear(_ animated: Bool) {
+           super.viewDidAppear(animated)
+
+       }
+
+    private func setupNavigationBar() {
+           self.navigationController?.navigationBar.prefersLargeTitles = false
+           self.navigationItem.title = "Profile"
+
+       }
+
+
+    private func setupView() {
+        view.addSubview(tableView)
+        view.addSubview(alphaView)
+        view.addSubview(self.avatarView)
+        avatarView.addSubview(self.myImageView)
+        view.bringSubviewToFront(alphaView)
+        view.addSubview(closeButton)
+        view.bringSubviewToFront(avatarView)
+        self.avatarView.layer.cornerRadius = 75
+        self.alphaView.alpha = 0
+
+        self.avatarViewCenterXConstraint = self.avatarView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -1 * (screenWidth *  0.5 - 81))
+        self.avatarViewCenterYConstraint = self.avatarView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: -1 * (screenHeight * 0.5 - 126))
+        self.avatarViewHeightConstraint = self.avatarView.heightAnchor.constraint(equalToConstant: 150)
+        self.avatarViewWidthConstraint = self.avatarView.widthAnchor.constraint(equalToConstant: 150)
     }
 
     func setupConstraints() {
         NSLayoutConstraint.activate([
+
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
 
-            blurView.topAnchor.constraint(equalTo: view.topAnchor),
-            blurView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            blurView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            blurView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            self.avatarViewCenterXConstraint, self.avatarViewCenterYConstraint,
+            self.avatarViewHeightConstraint, self.avatarViewWidthConstraint,
 
-            copyAvatar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            copyAvatar.topAnchor.constraint(equalTo: tableView.topAnchor, constant: 16),
-            copyAvatar.widthAnchor.constraint(equalToConstant: 100),
-            copyAvatar.heightAnchor.constraint(equalToConstant: 100),
+            myImageView.topAnchor.constraint(equalTo: avatarView.topAnchor),
+            myImageView.bottomAnchor.constraint(equalTo: avatarView.bottomAnchor),
+            myImageView.leadingAnchor.constraint(equalTo: avatarView.leadingAnchor),
+            myImageView.trailingAnchor.constraint(equalTo: avatarView.trailingAnchor),
 
-            closeButton.heightAnchor.constraint(equalToConstant: 60),
-            closeButton.widthAnchor.constraint(equalToConstant: 60),
-            closeButton.topAnchor.constraint(equalTo: blurView.safeAreaLayoutGuide.topAnchor, constant: 16),
-            closeButton.trailingAnchor.constraint(equalTo: blurView.trailingAnchor, constant: -16)
-        ])
+            alphaView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            alphaView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            alphaView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+            alphaView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
+            
+            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            closeButton.heightAnchor.constraint(equalToConstant: 40),
+            closeButton.widthAnchor.constraint(equalToConstant: 40)
+        ].compactMap({ $0 }))
     }
 
-    private func setupNavBar() {
-        navigationController?.navigationBar.isHidden = true
+    private func setupGesture() {
+        self.tapGestureRecognizer.addTarget(self, action: #selector(self.firstTapGesture(_ :)))
+        self.avatarView.addGestureRecognizer(self.tapGestureRecognizer)
     }
 
+    @objc func firstTapGesture(_ gestureRecognizer: UITapGestureRecognizer) {
+        guard self.tapGestureRecognizer === gestureRecognizer else { return }
+        self.isExpanded.toggle()
+        self.avatarViewCenterXConstraint?.constant = self.isExpanded ? 0 : -1 * (screenWidth * 0.5 - 81)
+        self.avatarViewCenterYConstraint?.constant = self.isExpanded ? 0 : -1 * (screenHeight * 0.5 - 126)
+        self.avatarViewHeightConstraint?.constant = self.isExpanded ? screenWidth : 150
+        self.avatarViewWidthConstraint?.constant = self.isExpanded ? screenWidth : 150
 
-    private func avatarTapGesture() {
-        let avatarTapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureAvatar))
-        avatarTapGesture.numberOfTapsRequired = 1
-        avatarTapGesture.numberOfTouchesRequired = 1
-        copyAvatar.isUserInteractionEnabled = true
-        copyAvatar.addGestureRecognizer(avatarTapGesture)
-    }
-
-
-    private func closeButtonTapGesture() {
-        let closeButtonTapGesture = UITapGestureRecognizer(target: self, action: #selector(TapGestureClose))
-        closeButton.addGestureRecognizer(closeButtonTapGesture)
+        UIView.animate(withDuration: 0.5) {
+            self.avatarView.layer.cornerRadius = self.isExpanded ? 0 : 75
+            self.alphaView.alpha = self.isExpanded ? 0.7 : 0
+            self.view.layoutIfNeeded()
+        } completion: { _ in
         }
 
-    @objc private func tapGestureAvatar(_ gestureRecognizer: UITapGestureRecognizer) {
+        if self.isExpanded {
+            self.alphaView.isHidden = false
+            self.closeButton.isHidden = false
+        }
 
-
-        let scaleRatio = self.blurView.frame.width / self.copyAvatar.frame.width
-
-        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseIn) {
-
-            self.copyAvatar.isHidden = false
-            self.blurView.isHidden = false
-
-
-            self.copyAvatar.center = self.blurView.center
-            self.copyAvatar.transform = CGAffineTransform(scaleX: scaleRatio, y: scaleRatio)
-            self.copyAvatar.isUserInteractionEnabled = false
-
+        UIView.animate(withDuration: 0.3, delay: 0.5) {
+            self.closeButton.alpha = self.isExpanded ? 1 : 0
         } completion: { _ in
-            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn) {
-                self.closeButton.isHidden = false
-            }
+            self.closeButton.isHidden = !self.isExpanded
         }
     }
 
+    @objc private func didTapCloseButton() {
+        self.avatarViewCenterXConstraint?.constant = -1 * (screenWidth * 0.5 - 81)
+        self.avatarViewCenterYConstraint?.constant = -1 * (screenHeight * 0.5 - 126)
+        self.avatarViewHeightConstraint?.constant = 150
+        self.avatarViewWidthConstraint?.constant = 150
+        self.closeButton.alpha = 0
 
-    @objc private func TapGestureClose(_ gestureRecognizer: UITapGestureRecognizer) {
-
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn) {
-            self.closeButton.isHidden = true
+        UIView.animate(withDuration: 0.5) {
+            self.avatarView.layer.cornerRadius = 75
+            self.alphaView.alpha = 0
+            self.view.layoutIfNeeded()
+            self.closeButton.alpha = 0
         } completion: { _ in
-            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseIn) {
-                    self.copyAvatar.frame = CGRect(x: self.spaceToAvatar.x, y: self.spaceToAvatar.y, width: self.sizeOfAvatar.x, height: self.sizeOfAvatar.y)
-                    self.copyAvatar.transform = .identity
-                    self.blurView.isHidden = true
-                    self.copyAvatar.isHidden = true
-            }
+            self.closeButton.isHidden = false
+            self.isExpanded = false
         }
     }
 }
@@ -223,23 +191,22 @@ class ProfileViewController : UIViewController {
 extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        post.count 
+        post.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "PostCellID", for: indexPath) as! PostTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "PostCellID", for: indexPath) as! PostTableViewCell
 
-            let dataSource = post[indexPath.row]
-            cell.setup(post: dataSource)
-            return cell
-        }
+        let dataSource = post[indexPath.row]
+        cell.setup(post: dataSource)
+        return cell
+    }
 
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0 {
 
             let profile = ProfileHeaderView()
-            // profile.setup(user: userIsLogin)
             return profile
         }
         return nil
