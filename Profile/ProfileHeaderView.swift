@@ -10,7 +10,7 @@ final class ProfileHeaderView: UIView, UITextFieldDelegate {
     
     private lazy var myImageView: UIImageView = {
         let myImage = UIImageView()
-        myImage.image = UIImage(named: "cat.png")
+        myImage.image = UIImage(named: "")
         myImage.layer.borderWidth = 3.0
         myImage.layer.borderColor = UIColor.white.cgColor
         myImage.layer.cornerRadius = 50
