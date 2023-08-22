@@ -1,5 +1,6 @@
 import UIKit
 import CoreData
+import StorageService
 
 
 class ProfileViewController : UIViewController {
@@ -9,6 +10,8 @@ class ProfileViewController : UIViewController {
         return profileHeader
     }()
 
+    var liked: Bool = false
+
     private lazy var tableView : UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.backgroundColor = .white
@@ -16,6 +19,7 @@ class ProfileViewController : UIViewController {
         tableView.backgroundColor = .white
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.register(PhotosTableViewCell.self, forCellReuseIdentifier: "PhotosTableViewCell")
         tableView.register(PostTableViewCell.self, forCellReuseIdentifier: "PostCellID")
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
@@ -85,6 +89,11 @@ class ProfileViewController : UIViewController {
 
        }
 
+    func tapLikedLabel() {
+          liked.toggle()
+          self.tableView.reloadData()
+      }
+
     private func setupNavigationBar() {
            self.navigationController?.navigationBar.prefersLargeTitles = false
            self.navigationItem.title = "Profile"
@@ -93,6 +102,11 @@ class ProfileViewController : UIViewController {
 
 
     private func setupView() {
+        #if DEBUG
+        view.backgroundColor = .red
+        #else
+        view.backgroundColor = .white
+        #endif
         view.addSubview(tableView)
         view.addSubview(alphaView)
         view.addSubview(self.avatarView)

@@ -1,4 +1,5 @@
 import UIKit
+import StorageService
 
 class PostTableViewCell: UITableViewCell {
 
@@ -72,6 +73,7 @@ class PostTableViewCell: UITableViewCell {
         setupViews()
         setupConstraints()
     }
+ 
 
     public func setup(post: bookPost)  {
         do {

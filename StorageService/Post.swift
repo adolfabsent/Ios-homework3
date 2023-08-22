@@ -9,13 +9,16 @@ import UIKit
 
 
     public struct bookPost {
-        let author : String
-        let image: String
-        let description: String
-        var likes: Int
-        var views: Int
-        var id : Int
+       public var author : String
+        public var image: String
+        public var description: String
+        public var likes: Int
+        public var views: Int
+        public var id : Int
+
     }
+
+
 
 public var post : [bookPost] = [
     bookPost(author: "best-books", image: "Marcel Proust", description: "Valentin Louis Georges Eugène Marcel Proust (/pruːst/ PROOST,[1] French: [maʁsɛl pʁust]; 10 July 1871 – 18 November 1922) was a French novelist, literary critic.", likes: 207, views: 987,id: 0),
