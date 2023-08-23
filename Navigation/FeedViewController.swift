@@ -1,10 +1,3 @@
-//
-//  FeedViewController.swift
-//  Navigation
-//
-//  Created by Слава Орлов on 19.12.2022.
-//
-
 import UIKit
 
 class FeedViewController: UIViewController {
