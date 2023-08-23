@@ -1,27 +1,23 @@
 import UIKit
 
 class PostViewController: UIViewController {
-    
-    var titleString: String = ""
+
+    var post: Post?
     
     override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        let barButtonItem = UIBarButtonItem(title: "Info", style: .plain, target: self, action: #selector(itemAction))
-        
-        self.navigationItem.rightBarButtonItem = barButtonItem
-    
-        view.backgroundColor = .white
-        title = titleString
-    }
-    
-    @objc private func itemAction(){
-        
-        let infoViewController = InfoViewController()
-        
-        self.navigationController?.pushViewController(infoViewController, animated: true)
-        
-    }
+           super.viewDidLoad()
+
+           title = post?.author ?? "-"
+           view.backgroundColor = .systemYellow
+
+           let barButton = UIBarButtonItem(title: "Info", style: .done, target: self, action: #selector(tapInfoButton))
+           navigationItem.rightBarButtonItem = barButton
+       }
+
+       @objc func tapInfoButton() {
+           let infoVC = InfoViewController()
+           present(infoVC, animated: true, completion: nil)
+       }
+   }
     
 
-}

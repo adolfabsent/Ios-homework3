@@ -9,39 +9,29 @@ import UIKit
 
 class PhotosCollectionViewCell: UICollectionViewCell {
 
-    private lazy var backView: UIView = {
-        let view = UIView()
-        view.clipsToBounds = true
-        view.layer.maskedCorners = [
-            .layerMinXMinYCorner,
-            .layerMaxXMinYCorner,
-            .layerMinXMaxYCorner,
-            .layerMaxXMaxYCorner
-        ]
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-
-    lazy var photoGalleryImages: UIImageView = {
-        let photoGalleryImages = UIImageView()
-        photoGalleryImages.layer.cornerRadius = 6
-        photoGalleryImages.clipsToBounds = true
-        photoGalleryImages.translatesAutoresizingMaskIntoConstraints = false
-        return photoGalleryImages
-    }()
+    var photo: UIImageView = {
+         let photos = UIImageView()
+         photos.translatesAutoresizingMaskIntoConstraints = false
+         return photos
+     }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.addSubview(photoGalleryImages)
+        self.contentView.addSubview(photo)
         NSLayoutConstraint.activate([
-            photoGalleryImages.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
-            photoGalleryImages.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
-            photoGalleryImages.heightAnchor.constraint(equalTo: self.contentView.heightAnchor),
-            photoGalleryImages.widthAnchor.constraint(equalTo: self.contentView.widthAnchor)
+            photo.topAnchor.constraint(equalTo: contentView.topAnchor),
+            photo.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            photo.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            photo.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    public func configCellCollection(photo: UIImage) {
+           self.photo.image = photo
+       }
 }
+

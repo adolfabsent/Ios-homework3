@@ -9,111 +9,76 @@ import UIKit
 
 class PhotosViewController: UIViewController {
 
-    var selectedCell: PhotosCollectionViewCell?
-    var selectedCellImageViewSnapshot: UIView?
+    let photoIdent = "photoCell"
 
-    private enum Constants {
-        static let itemCount: CGFloat = 3
-    }
 
     private lazy var layout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 8
         layout.minimumInteritemSpacing = 8
+        layout.minimumLineSpacing = 8
+        layout.scrollDirection = .vertical
+        layout.sectionInset = UIEdgeInsets.init(top: 8, left: 8, bottom: 8, right: 8)
         return layout
     }()
 
     private lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.layout)
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.register(PhotosCollectionViewCell.self, forCellWithReuseIdentifier: "PhotosCollectionViewCell")
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "DefaultCollectionCell")
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        return collectionView
-    }()
-
-    private let tapGestureRecognizer = UITapGestureRecognizer()
-
-    private var collectionDataSource : [CollectionViewModel] = [
-        CollectionViewModel(image: "1.jpeg"),
-        CollectionViewModel(image: "2.jpeg"),
-        CollectionViewModel(image: "3.jpeg"),
-        CollectionViewModel(image: "4.jpeg"),
-        CollectionViewModel(image: "5.jpeg"),
-        CollectionViewModel(image: "6.jpeg"),
-        CollectionViewModel(image: "7.jpeg"),
-        CollectionViewModel(image: "8.jpeg"),
-        CollectionViewModel(image: "9.jpeg"),
-        CollectionViewModel(image: "10.jpeg"),
-        CollectionViewModel(image: "11.jpeg"),
-        CollectionViewModel(image: "12.jpeg"),
-        CollectionViewModel(image: "13.jpeg"),
-        CollectionViewModel(image: "14.jpeg"),
-        CollectionViewModel(image: "15.jpeg"),
-        CollectionViewModel(image: "16.jpeg"),
-        CollectionViewModel(image: "17.jpeg"),
-        CollectionViewModel(image: "18.jpeg"),
-        CollectionViewModel(image: "19.jpeg"),
-        CollectionViewModel(image: "20.jpeg"),
-    ]
+        let photos = UICollectionView(frame: .zero, collectionViewLayout: layout)
+                photos.translatesAutoresizingMaskIntoConstraints = false
+                photos.backgroundColor = .white
+                photos.register(PhotosCollectionViewCell.self, forCellWithReuseIdentifier: photoIdent)
+                return photos
+            }()
 
     override func viewDidLoad() {
-        super.viewDidLoad()
-        self.setupView()
-        self.title = "Photos"
-        navigationItem.backButtonTitle = ""
-    }
+           super.viewDidLoad()
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: animated)
-    }
+           self.title = "Photo Gallery"
+           self.view.addSubview(collectionView)
+           self.collectionView.dataSource = self
+           self.collectionView.delegate = self
+           setupConstraints()
+       }
 
-    private func setupView() {
-        view.addSubview(collectionView)
+       private func setupConstraints() {
+           NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+           ])
+       }
 
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-        ])
-    }
+       override func viewWillAppear(_ animated: Bool) {
+           super.viewWillAppear(animated)
+           navigationController?.navigationBar.isHidden = false
+       }
 
-    private func itemSize(for width: CGFloat, with spacing: CGFloat) -> CGSize {
-        let neededWidth = width - 4 * spacing
-        let itemWidth = floor(neededWidth / Constants.itemCount)
-        return CGSize(width: itemWidth, height: itemWidth)
+       override func viewWillDisappear(_ animated: Bool) {
+           super.viewWillDisappear(animated)
+           navigationController?.navigationBar.isHidden = true
+       }
+   }
+
+
+extension PhotosViewController: UICollectionViewDelegateFlowLayout {
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let countItem: CGFloat = 2
+        let accessibleWidth = collectionView.frame.width - 32
+        let widthItem = (accessibleWidth / countItem)
+        return CGSize(width: widthItem, height: widthItem * 0.56)
     }
 }
 
-extension PhotosViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension PhotosViewController: UICollectionViewDataSource {
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.collectionDataSource.count
+        return Photos.shared.examples.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotosCollectionViewCell", for: indexPath) as? PhotosCollectionViewCell else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DefaultCollectionCell", for: indexPath)
-            cell.backgroundColor = .black
-            return cell
-        }
-        cell.backgroundColor = .systemGray6
-        let photos = collectionDataSource[indexPath.row]
-        cell.photoGalleryImages.image = UIImage(named: photos.image)
-        cell.photoGalleryImages.contentMode = .scaleAspectFill
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: photoIdent, for: indexPath) as? PhotosCollectionViewCell else { return UICollectionViewCell()}
+        cell.configCellCollection(photo: Photos.shared.examples[indexPath.item])
         return cell
     }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt: IndexPath) -> CGSize {
-        let spacing = ( collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.minimumInteritemSpacing
-        return self.itemSize(for: collectionView.frame.width, with: spacing ?? 0)
-    }
-
 }
