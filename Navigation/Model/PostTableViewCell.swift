@@ -1,11 +1,11 @@
 import UIKit
 import StorageService
+import iOSIntPackage
 
 class PostTableViewCell: UITableViewCell {
 
     private var viewCounter = 0
 
-    // MARK: Visual objects
 
     var postAuthor: UILabel = {
         let label = UILabel()
@@ -50,7 +50,6 @@ class PostTableViewCell: UITableViewCell {
         return label
     }()
 
-    // MARK: - Init section
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -95,10 +94,23 @@ class PostTableViewCell: UITableViewCell {
         postLikes.text = "Likes: \(post.likes)"
         viewCounter = post.views
         postViews.text = "Views: \(viewCounter)"
+
+        let filteredImage = ImageProcessor()
+        filteredImage.processImage(
+            sourceImage: UIImage(named: post.image) ?? UIImage(),
+            filter:.noir,
+            completion: showFilteredImage
+            )
     }
 
     func incrementPostViewsCounter() {
         viewCounter += 1
         postViews.text = "Views: \(viewCounter)"
     }
+
+    func showFilteredImage(for outputImage: UIImage?) -> Void {
+            postImage.image = outputImage
+        }
 }
+
+
