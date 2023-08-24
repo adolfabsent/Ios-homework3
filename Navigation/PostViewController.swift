@@ -19,5 +19,4 @@ class PostViewController: UIViewController {
            present(infoVC, animated: true, completion: nil)
        }
    }
-    
 

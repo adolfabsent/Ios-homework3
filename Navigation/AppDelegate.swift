@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
            tabBarController.tabBar.backgroundColor = .white
            tabBarController.viewControllers = [profileNC, feedNC]
 
-           // activate main window
+         
            window = UIWindow(frame: UIScreen.main.bounds)
            window?.rootViewController = tabBarController
            window?.makeKeyAndVisible()
