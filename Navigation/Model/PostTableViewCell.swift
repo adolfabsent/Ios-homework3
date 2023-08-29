@@ -5,8 +5,6 @@ class PostTableViewCell: UITableViewCell {
 
     private var viewCounter = 0
 
-    // MARK: Visual objects
-
     var postAuthor: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false

@@ -7,6 +7,17 @@ final class LogInViewController: UIViewController {
     private var login = "login@mail.ru"
     private var password = "pass"
 
+    private let userService: UserService
+
+        init(userService: UserService) {
+            self.userService = userService
+            super.init(nibName: nil, bundle: nil)
+        }
+
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.backgroundColor = .white
@@ -119,14 +130,6 @@ final class LogInViewController: UIViewController {
         hideKeyboardTapped()
     }
 
-    init(){
-            super.init(nibName: nil, bundle: nil)
-        }
-
-        required init?(coder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
-
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         notificationCenter.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -149,8 +152,8 @@ final class LogInViewController: UIViewController {
         loginPasswordStackView.addArrangedSubview(loginTextField)
         loginPasswordStackView.addArrangedSubview(passwordTextField)
         loginPasswordStackView.addSubview(separatingLine)
-        
     }
+    
     private func setupLabelAlert() {
         self.contentView.addSubview(self.labelAlert)
         
@@ -201,8 +204,20 @@ final class LogInViewController: UIViewController {
     }
 
     @objc func buttonClicked() {
-        let profileViewController = ProfileViewController()
-               navigationController?.pushViewController(profileViewController, animated: true)
+         #if DEBUG
+               let user = TestUserService().authorization(login: loginTextField.text ?? "")
+           #else
+               let user = CurrentUserService().authorization(login: loginTextField.text ?? "")
+           #endif
+       if let finalUser = user {
+           let profileViewController = ProfileViewController(user: finalUser)
+           navigationController?.pushViewController(profileViewController, animated: true)
+       } else {
+           let alertController = UIAlertController(title: "Ошибка", message: "Введен некорректный логин", preferredStyle: .alert)
+           let okBtn = UIAlertAction(title: "Понял", style: .default)
+           alertController.addAction(okBtn)
+           present(alertController, animated: true)
+       }
    }
 
     @objc private func keyboardWillShow(notification: NSNotification) {
@@ -216,7 +231,10 @@ final class LogInViewController: UIViewController {
         scrollView.contentInset.bottom = .zero
         scrollView.verticalScrollIndicatorInsets = .zero
     }
+
 }
+
+
 extension LogInViewController: UITextFieldDelegate {
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

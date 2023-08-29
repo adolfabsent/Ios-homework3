@@ -3,18 +3,36 @@ import UIKit
 
 final class ProfileViewController: UIViewController {
 
-    static let headerIdent = "header"
+    let user: User?
+
+       static let headerIdent = "header"
        static let photoIdent = "photo"
        static let postIdent = "post"
+       static let defaultCell = "DefaultCellID"
 
        static var postTableView: UITableView = {
            let table = UITableView(frame: .zero, style: .grouped)
-           table.translatesAutoresizingMaskIntoConstraints = false
-           table.register(ProfileHeaderView.self, forHeaderFooterViewReuseIdentifier: headerIdent)
-           table.register(PhotosTableViewCell.self, forCellReuseIdentifier: photoIdent)
-           table.register(PostTableViewCell.self, forCellReuseIdentifier: postIdent)
-           return table
-       }()
+                    table.translatesAutoresizingMaskIntoConstraints = false
+                    table.register(ProfileHeaderView.self, forHeaderFooterViewReuseIdentifier: headerIdent)
+                    table.register(PhotosTableViewCell.self, forCellReuseIdentifier: photoIdent)
+                    table.register(PostTableViewCell.self, forCellReuseIdentifier: postIdent)
+                    return table
+                }()
+
+    init(user: User?) {
+           self.user = user
+           super.init(nibName: nil, bundle: nil)
+       }
+
+       required init?(coder: NSCoder) {
+           fatalError("init(coder:) has not been implemented")
+       }
+
+    override func viewWillAppear(_ animated: Bool) {
+            super.viewWillAppear(animated)
+            self.setupNavigation()
+        }
+        
 
        override func viewDidLoad() {
            super.viewDidLoad()
@@ -28,6 +46,10 @@ final class ProfileViewController: UIViewController {
            Self.postTableView.refreshControl = UIRefreshControl()
            Self.postTableView.refreshControl?.addTarget(self, action: #selector(reloadTableView), for: .valueChanged)
        }
+
+    private func setupNavigation() {
+          self.navigationController?.setNavigationBarHidden(true, animated: false)
+      }
 
        private func setupConstraints() {
            NSLayoutConstraint.activate([
@@ -79,14 +101,16 @@ final class ProfileViewController: UIViewController {
        }
 
        func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-           guard section == 0 else { return nil }
-           let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: Self.headerIdent) as! ProfileHeaderView
+
+           guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: Self.headerIdent) as? ProfileHeaderView else {return UITableViewCell()}
+           headerView.setupUser(user: user!)
            return headerView
        }
 
        func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-           return section == 0 ? 220 : 0
-       }
+                    return section == 0 ? 220 : 0
+                }
+
 
        func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
            switch indexPath.section {
