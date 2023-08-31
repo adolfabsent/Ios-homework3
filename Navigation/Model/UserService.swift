@@ -56,3 +56,6 @@ class TestUserService: UserService {
         return testUser
     }
 }
+
+let currentUserService = CurrentUserService()
+let testUserService = TestUserService()

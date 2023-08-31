@@ -7,10 +7,14 @@ final class LogInViewController: UIViewController {
     private var login = "login@mail.ru"
     private var password = "pass"
 
+    var loginDelegate: LoginViewControllerDelegate?
+
+
     private let userService: UserService
 
-        init(userService: UserService) {
+        init(userService: UserService, loginDelegate: LoginViewControllerDelegate) {
             self.userService = userService
+            self.loginDelegate = loginDelegate
             super.init(nibName: nil, bundle: nil)
         }
 
@@ -204,21 +208,23 @@ final class LogInViewController: UIViewController {
     }
 
     @objc func buttonClicked() {
-         #if DEBUG
-               let user = TestUserService().authorization(login: loginTextField.text ?? "")
-           #else
-               let user = CurrentUserService().authorization(login: loginTextField.text ?? "")
-           #endif
-       if let finalUser = user {
-           let profileViewController = ProfileViewController(user: finalUser)
-           navigationController?.pushViewController(profileViewController, animated: true)
-       } else {
-           let alertController = UIAlertController(title: "Ошибка", message: "Введен некорректный логин", preferredStyle: .alert)
-           let okBtn = UIAlertAction(title: "Понял", style: .default)
-           alertController.addAction(okBtn)
-           present(alertController, animated: true)
-       }
-   }
+#if DEBUG
+        let user = testUserService
+#else
+        let user = currentUserService
+#endif
+
+        let alertController = UIAlertController(title: "Error", message: "Incorrect password", preferredStyle: .alert)
+        let wrongPasswordAction = UIAlertAction(title: "Try again?", style: .destructive)
+        alertController.addAction(wrongPasswordAction)
+
+        if (loginDelegate?.check(login: loginTextField.text!, password: passwordTextField.text!)) ?? false, let user = user.authorization(login: loginTextField.text ?? "")  {
+            let vc = ProfileViewController(user: user)
+            self.navigationController?.pushViewController(vc, animated: true)
+        } else {
+            present(alertController, animated: true, completion: nil)
+        }
+    }
 
     @objc private func keyboardWillShow(notification: NSNotification) {
             if let keybordSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
@@ -252,3 +258,9 @@ extension LogInViewController: UITextFieldDelegate {
         view.endEditing(true)
     }
 }
+
+protocol LoginViewControllerDelegate {
+
+    func check(login: String, password: String) -> Bool
+}
+
