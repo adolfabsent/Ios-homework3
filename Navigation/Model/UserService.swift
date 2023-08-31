@@ -33,11 +33,7 @@ class CurrentUserService: UserService {
         status: "Looking for Food"
     )
     func authorization(login: String) -> User? {
-        var currentUser: User?
-        if login == "Raymond" {
-            currentUser = user
-        }
-        return currentUser
+        return login == user.login ? user : nil
     }
 }
 
@@ -49,11 +45,7 @@ class TestUserService: UserService {
         status: "Looking for Sugar"
     )
     func authorization(login: String) -> User? {
-        var testUser: User?
-        if login == "Lolly" {
-            testUser = user
-        }
-        return testUser
+        return login == user.login ? user : nil
     }
 }
 

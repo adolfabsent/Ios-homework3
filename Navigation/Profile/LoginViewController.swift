@@ -4,8 +4,6 @@ final class LogInViewController: UIViewController {
 
 
     private let notificationCenter = NotificationCenter.default
-    private var login = "login@mail.ru"
-    private var password = "pass"
 
     var loginDelegate: LoginViewControllerDelegate?
 
@@ -209,16 +207,16 @@ final class LogInViewController: UIViewController {
 
     @objc func buttonClicked() {
 #if DEBUG
-        let user = testUserService
+        let service = TestUserService()
 #else
-        let user = currentUserService
+        let service = CurrentUserService()
 #endif
 
         let alertController = UIAlertController(title: "Error", message: "Incorrect password", preferredStyle: .alert)
         let wrongPasswordAction = UIAlertAction(title: "Try again?", style: .destructive)
         alertController.addAction(wrongPasswordAction)
 
-        if (loginDelegate?.check(login: loginTextField.text!, password: passwordTextField.text!)) ?? false, let user = user.authorization(login: loginTextField.text ?? "")  {
+        if (loginDelegate?.check(login: loginTextField.text!, password: passwordTextField.text!)) ?? false, let user = service.authorization(login: loginTextField.text ?? "")  {
             let vc = ProfileViewController(user: user)
             self.navigationController?.pushViewController(vc, animated: true)
         } else {
