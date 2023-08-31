@@ -44,8 +44,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     private func createLogInViewController() -> UINavigationController {
         let userService = CurrentUserService()
-
-        let logInViewController = LogInViewController(userService: userService)
+        
+        let profile = UINavigationController(rootViewController: LogInViewController(userService: userService, loginDelegate: LoginInspector()))
+        
+        let logInViewController = LogInViewController(userService: userService, loginDelegate: LoginInspector())
+        logInViewController.loginDelegate = MyLoginFactory().makeLoginInspector()
         logInViewController.title = "Профиль"
         logInViewController.tabBarItem = UITabBarItem(
             title: "Профиль",
