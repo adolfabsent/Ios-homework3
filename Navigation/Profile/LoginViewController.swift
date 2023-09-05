@@ -2,11 +2,9 @@ import UIKit
 
 final class LogInViewController: UIViewController {
 
-
     private let notificationCenter = NotificationCenter.default
 
     var loginDelegate: LoginViewControllerDelegate?
-
 
     private let userService: UserService
 
@@ -84,6 +82,7 @@ final class LogInViewController: UIViewController {
         textField.clearButtonMode = .whileEditing
         textField.backgroundColor = UIColor(named: "textFildBackgroundColor")
         textField.placeholder = "Email or phone"
+        textField.text = "Raymond"
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: textField.frame.height))
         textField.leftViewMode = .always
         textField.autocapitalizationType = .none
@@ -100,6 +99,7 @@ final class LogInViewController: UIViewController {
         textField.clearButtonMode = .whileEditing
         textField.backgroundColor = UIColor(named: "textFildBackgroundColor")
         textField.placeholder = "Введите Password"
+        textField.text = "Raymond11"
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: textField.frame.height))
         textField.leftViewMode = .always
         textField.autocapitalizationType = .none

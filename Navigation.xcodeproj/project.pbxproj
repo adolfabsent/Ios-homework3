@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		781AE39E2AA79EA70028FC6E /* iOSIntPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 781AE39D2AA79EA70028FC6E /* iOSIntPackage */; };
 		782260612A8BBE0800AA8E44 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 782260602A8BBE0800AA8E44 /* Assets.xcassets */; };
 		785EB38A2A83D7BC00F752AF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785EB3892A83D7BC00F752AF /* LoginViewController.swift */; };
 		7863D6DB2A9DEAB6003AD974 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7863D6DA2A9DEAB6003AD974 /* UserService.swift */; };
@@ -126,6 +127,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				78C46F7D2A94BDF700B741B9 /* StorageService.framework in Frameworks */,
+				781AE39E2AA79EA70028FC6E /* iOSIntPackage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,6 +282,9 @@
 				78C46F7C2A94BDF700B741B9 /* PBXTargetDependency */,
 			);
 			name = Navigation;
+			packageProductDependencies = (
+				781AE39D2AA79EA70028FC6E /* iOSIntPackage */,
+			);
 			productName = Navigation;
 			productReference = DD78C3F92950FD6D006D31F5 /* Navigation.app */;
 			productType = "com.apple.product-type.application";
@@ -315,6 +320,9 @@
 				Base,
 			);
 			mainGroup = DD78C3F02950FD6D006D31F5;
+			packageReferences = (
+				781AE39C2AA79EA70028FC6E /* XCRemoteSwiftPackageReference "iOSIntPackage" */,
+			);
 			productRefGroup = DD78C3FA2950FD6D006D31F5 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -722,6 +730,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		781AE39C2AA79EA70028FC6E /* XCRemoteSwiftPackageReference "iOSIntPackage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/TrueMax/iOSIntPackage.git";
+			requirement = {
+				branch = imagepublisher;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		781AE39D2AA79EA70028FC6E /* iOSIntPackage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 781AE39C2AA79EA70028FC6E /* XCRemoteSwiftPackageReference "iOSIntPackage" */;
+			productName = iOSIntPackage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = DD78C3F12950FD6D006D31F5 /* Project object */;
 }
