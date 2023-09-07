@@ -13,14 +13,13 @@ class InfoViewController: UIViewController {
     
     private func setupView(){
         title = "Info"
+        let button = CustomButton(title: "PushPost", titleColor: .white, backgroundColor: .gray, buttonTap: buttonAction)
+        button.frame = CGRectMake(150, 240, 95, 95)
         view.backgroundColor = .white
-        button.setTitle("Push Post", for: .normal)
-        button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
-        button.backgroundColor = .gray
         view.addSubview(button)
     }
     
-    @objc private func buttonAction(){
+    @objc private func buttonAction(sender: UIButton!) {
         
         let alert = UIAlertController(title: "Успех!", message: "Новый пост успешно опубликован!", preferredStyle: .alert)
         
