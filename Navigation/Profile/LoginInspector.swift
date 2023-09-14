@@ -7,18 +7,10 @@
 
 import Foundation
 
-struct LoginInspector {
-
-    let checker = Checker.shared
-
-}
-
-extension LoginInspector: LoginViewControllerDelegate {
-
+class LoginInspector: LoginViewControllerDelegate {
     func check(login: String, password: String) -> Bool {
-        checker.check(login: login, password: password)
+        Checker.shared.check(login: login, password: password)
     }
-
 }
 
 protocol LoginFactory {

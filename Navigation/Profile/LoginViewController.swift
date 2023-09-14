@@ -1,16 +1,14 @@
 import UIKit
 
+
 final class LogInViewController: UIViewController {
 
     private let notificationCenter = NotificationCenter.default
 
-    var loginDelegate: LoginViewControllerDelegate?
+    static var loginDelegate: LoginViewControllerDelegate?
 
-    private let userService: UserService
 
-        init(userService: UserService, loginDelegate: LoginViewControllerDelegate) {
-            self.userService = userService
-            self.loginDelegate = loginDelegate
+        init() {
             super.init(nibName: nil, bundle: nil)
         }
 
@@ -216,7 +214,7 @@ final class LogInViewController: UIViewController {
         let wrongPasswordAction = UIAlertAction(title: "Try again?", style: .destructive)
         alertController.addAction(wrongPasswordAction)
 
-        if (loginDelegate?.check(login: loginTextField.text!, password: passwordTextField.text!)) ?? false, let user = service.authorization(login: loginTextField.text ?? "")  {
+        if (LogInViewController.loginDelegate?.check(login: loginTextField.text!, password: passwordTextField.text!)) ?? false, let user = service.authorization(login: loginTextField.text ?? "")  {
             let vc = ProfileViewController(user: user)
             self.navigationController?.pushViewController(vc, animated: true)
         } else {
@@ -255,10 +253,5 @@ extension LogInViewController: UITextFieldDelegate {
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
-}
-
-protocol LoginViewControllerDelegate {
-
-    func check(login: String, password: String) -> Bool
 }
 

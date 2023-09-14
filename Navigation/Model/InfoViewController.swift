@@ -13,7 +13,7 @@ class InfoViewController: UIViewController {
     
     private func setupView(){
         title = "Info"
-        let button = CustomButton(title: "PushPost", titleColor: .white, backgroundColor: .gray, buttonTap: buttonAction)
+        let button = CustomButton(title: "PushPost", titleColor: .white)
         button.frame = CGRectMake(150, 240, 95, 95)
         view.backgroundColor = .white
         view.addSubview(button)
