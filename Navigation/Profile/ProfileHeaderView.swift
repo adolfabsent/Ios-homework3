@@ -102,6 +102,12 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
             setStatusButton.heightAnchor.constraint(equalToConstant: 48),
         ])
     }
+
+    func setUser(avatarImage: UIImage, fullName: String, status: String) {
+            avatarImageView.image = avatarImage
+            fullNameLabel.text = fullName
+            statusLabel.text = status
+        }
     
     private func setupAvatarImage() {
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false

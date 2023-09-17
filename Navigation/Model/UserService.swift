@@ -26,6 +26,7 @@ protocol UserService {
 }
 
 class CurrentUserService: UserService {
+
     let user = User(
         login: "Raymond",
         name: "Cat Raymond",
@@ -47,7 +48,10 @@ class TestUserService: UserService {
     func authorization(login: String) -> User? {
         return login == user.login ? user : nil
     }
+
 }
 
-let currentUserService = CurrentUserService()
-let testUserService = TestUserService()
+    let currentUserService = CurrentUserService()
+    let testUserService = TestUserService()
+
+

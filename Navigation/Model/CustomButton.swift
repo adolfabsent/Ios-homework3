@@ -9,30 +9,25 @@ import UIKit
 
 final class CustomButton: UIButton {
 
-    private let title: String
-    private let titleColor: UIColor
+    var buttonTap: ((_: UIButton?) -> Void)!
 
-    var tapAction: (() -> Void)?
+        init(title: String, titleColor: UIColor, backgroundColor: UIColor, buttonTap: @escaping (_: UIButton?) -> Void) {
+                super.init(frame: .zero)
 
-    init(title: String, titleColor: UIColor) {
-        self.title = title
-        self.titleColor = titleColor
-        super.init(frame: .zero)
+                self.setTitle(title, for: .normal)
+                self.setTitleColor(titleColor, for: .normal)
+                self.backgroundColor = backgroundColor
+                self.buttonTap = buttonTap
+                self.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+            }
 
-        setup()
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+
+        @objc private func buttonTapped() {
+               if (buttonTap != nil) {
+                   self.buttonTap(self)
+               }
+           }
     }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    private func setup() {
-        setTitle(title, for: .normal)
-        setTitleColor(titleColor, for: .normal)
-        addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
-    }
-
-    @objc private func buttonTapped() {
-        tapAction?()
-    }
-}

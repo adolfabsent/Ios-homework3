@@ -4,6 +4,8 @@ import UIKit
 final class ProfileViewController: UIViewController {
 
     let user: User?
+    let profileViewModel: ProfileViewModel
+    let photoCoordinator: PhotoCoordinator
 
        static let headerIdent = "header"
        static let photoIdent = "photo"
@@ -19,8 +21,10 @@ final class ProfileViewController: UIViewController {
                     return table
                 }()
 
-    init(user: User?) {
+    init(user: User, photoCoordinator: PhotoCoordinator, profileViewModel: ProfileViewModel) {
            self.user = user
+           self.profileViewModel = profileViewModel
+           self.photoCoordinator = photoCoordinator
            super.init(nibName: nil, bundle: nil)
        }
 

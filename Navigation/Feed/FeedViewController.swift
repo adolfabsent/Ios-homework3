@@ -8,37 +8,111 @@ class FeedViewController: UIViewController {
         var title: String
     }
 
-    weak var parentNavigationController: UINavigationController?
-    let model: FeedModel = FeedModel()
-    let mainView: FeedView = FeedView()
+    let coordinator: FeedCoordinator
 
-    var backgroundColor: UIColor = .white
-
-    init(_ color: UIColor, _ title: String, parent parentNavigationController: UINavigationController) {
-        super.init(nibName: nil, bundle: nil)
-        backgroundColor = color
-        self.title = title
-        self.parentNavigationController = parentNavigationController
-    }
+      init(coordinator: FeedCoordinator) {
+          self.coordinator = coordinator
+          super.init(nibName: nil, bundle: nil)
+      }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    private lazy var buttonsStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
+        stackView.spacing = 10
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
 
-    override func loadView() {
-        super.loadView()
-        view.backgroundColor = .gray
-        self.view = mainView
-        mainView.setButtonTapAction(action: onButtonTap)
-        mainView.setCheckGuessButtonTapAction(action: onCheckGuessButtonTap)
-        view.backgroundColor = backgroundColor
-    }
+    private let guessWordView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.spacing = 10
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
 
+    private lazy var postButton: CustomButton = {
+        let button = CustomButton(title: "Перейти на пост", titleColor: .black, backgroundColor: .green, buttonTap: pressPost)
+        button.layer.cornerRadius = 12
+        button.clipsToBounds = true
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    private lazy var postTwoButton: CustomButton = {
+        let button = CustomButton(title: "Перейти на пост", titleColor: .white, backgroundColor: .blue, buttonTap: pressPost)
+        button.layer.cornerRadius = 12
+        button.clipsToBounds = true
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = .blue
+        return button
+    }()
+
+    private lazy var checkGuessButton: CustomButton = {
+        let button = CustomButton(title: "Check word", titleColor: .black, backgroundColor: .orange, buttonTap: buttonCheckWord)
+        button.layer.cornerRadius = 10
+        button.layer.borderWidth = 0.5
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    private lazy var wordTextField: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "Enter a word"
+        textField.font = UIFont.systemFont(ofSize: 16)
+        textField.textColor = .black
+        textField.backgroundColor = .systemGray6
+        textField.layer.cornerRadius = 10
+        textField.layer.borderWidth = 0.5
+        textField.returnKeyType = .done
+        textField.clearButtonMode = .whileEditing
+        textField.leftViewMode = .always
+        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: textField.frame.height))
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        return textField
+    }()
+
+    private lazy var checkGuessLabel: UILabel = {
+        let label = UILabel()
+        label.text = ""
+        label.backgroundColor = .systemGray6
+        label.textAlignment = .center
+        label.layer.cornerRadius = 10
+        label.layer.borderWidth = 0.5
+        label.clipsToBounds = true
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.addSubview(buttonsStackView)
+        buttonsStackView.addArrangedSubview(postButton)
+        buttonsStackView.addArrangedSubview(postTwoButton)
+        buttonsStackView.addArrangedSubview(guessWordView)
+
+        guessWordView.addArrangedSubview(wordTextField)
+        guessWordView.addArrangedSubview(checkGuessButton)
+        guessWordView.addArrangedSubview(checkGuessLabel)
+
+        setupConstraints()
+    }
+
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            buttonsStackView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+            buttonsStackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            buttonsStackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            buttonsStackView.heightAnchor.constraint(equalToConstant: 110),
+
+        ])
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -48,33 +122,50 @@ class FeedViewController: UIViewController {
         self.navigationItem.backButtonTitle = ""
     }
 
-    //@objc private func pressPost() {
-     //   let postVC = PostViewController()
-     //  postVC.navigationItem.title = post.title
-     //   self.navigationController?.present(postVC, animated: true)
-    //    print("Post")
-   // }
-
-
-    @objc
-        func onButtonTap() {
-            parentNavigationController?.pushViewController(PostViewController(nibName: nil, bundle: nil), animated: true)
-        }
-
-        @objc
-        func onCheckGuessButtonTap() {
-            let result = model.check(word: mainView.getInputText())
-
-            if result {
-                mainView.setLabelColor(.green)
-            } else {
-                mainView.setLabelColor(.red)
-            }
-        }
-
-        private func getPost() -> Post {
-            return Post(title: "New post!")
-        }
+    @objc private func pressPost(sender: UIButton!) {
+        let postVC = PostViewController()
+        postVC.navigationItem.title = post.title
+        self.navigationController?.pushViewController(postVC, animated: true)
+        print("Post")
     }
 
+    @objc func buttonCheckWord(sender: UIButton!) {
 
+        let word = wordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+        if word != "" {
+            let feedModel = FeedModel()
+            checkGuessLabel.backgroundColor = feedModel.check(word: word) ? .green : .red
+
+            let alert = UIAlertController(
+                title: feedModel.check(word: word) ? "Right" : "Wrong",
+                message: feedModel.check(word: word) ? "Correct word" : "Try again.",
+                preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default))
+            alert.view.tintColor = .black
+            self.present(alert, animated: true, completion: nil)
+        } else {
+            checkGuessLabel.text = ""
+            checkGuessLabel.backgroundColor  = .gray
+
+            let alert = UIAlertController(
+                title: "Enter a word",
+                message: "Enter a word and try again.",
+                preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default))
+            alert.view.tintColor = .black
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+}
+
+extension UIView {
+    func hideKeyboardTapped() {
+        let press: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
+        press.cancelsTouchesInView = false
+        self.addGestureRecognizer(press)
+    }
+
+    @objc func dismissKeyboard() {
+        self.endEditing(true)
+    }
+}

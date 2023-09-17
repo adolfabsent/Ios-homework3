@@ -5,16 +5,19 @@ final class LogInViewController: UIViewController {
 
     private let notificationCenter = NotificationCenter.default
 
-    static var loginDelegate: LoginViewControllerDelegate?
+    public var loginDelegate: LoginViewControllerDelegate?
 
+    let coordinator: ProfileCoordinator
 
-        init() {
-            super.init(nibName: nil, bundle: nil)
-        }
+    init(coordinator: ProfileCoordinator) {
+        self.coordinator = coordinator
+        self.loginDelegate = LoginInspector()
+        super.init(nibName: nil, bundle: nil)
+    }
 
-        required init?(coder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -127,20 +130,36 @@ final class LogInViewController: UIViewController {
         self.setupLabelAlert()
         loginTextField.delegate = self
         passwordTextField.delegate = self
-        hideKeyboardTapped()
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        notificationCenter.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-                notificationCenter.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
+           super.viewWillAppear(animated)
+           self.navigationController?.navigationBar.isHidden = true
+           let notificationCenter = NotificationCenter.default
+           notificationCenter.addObserver(
+               self,
+               selector: #selector(keyboardShow),
+               name: UIResponder.keyboardWillShowNotification,
+               object: nil
+           )
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        notificationCenter.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-                notificationCenter.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
+           notificationCenter.addObserver(
+               self,
+               selector: #selector(keyboardHide),
+               name: UIResponder.keyboardWillHideNotification,
+               object: nil
+           )
+
+           self.addTapGestureToHideKeyboard()
+       }
+
+       override func viewDidDisappear(_ animated: Bool) {
+           super.viewDidDisappear(animated)
+           let notificationCenter = NotificationCenter.default
+           notificationCenter.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+           notificationCenter.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+
+       }
 
     private func configureSubviews() {
         view.addSubview(scrollView)
@@ -203,55 +222,87 @@ final class LogInViewController: UIViewController {
         ])
     }
 
-    @objc func buttonClicked() {
-#if DEBUG
-        let service = TestUserService()
-#else
-        let service = CurrentUserService()
-#endif
+    @objc private func buttonClicked() {
+    let loginText = self.loginTextField.text
+           let passwordText = self.passwordTextField.text
 
-        let alertController = UIAlertController(title: "Error", message: "Incorrect password", preferredStyle: .alert)
-        let wrongPasswordAction = UIAlertAction(title: "Try again?", style: .destructive)
-        alertController.addAction(wrongPasswordAction)
+           if loginText != "" && passwordText != "" {
+               #if DEBUG
+                   let userService = TestUserService()
+               #else
+                   let userService = CurrentUserService()
+               #endif
 
-        if (LogInViewController.loginDelegate?.check(login: loginTextField.text!, password: passwordTextField.text!)) ?? false, let user = service.authorization(login: loginTextField.text ?? "")  {
-            let vc = ProfileViewController(user: user)
-            self.navigationController?.pushViewController(vc, animated: true)
-        } else {
-            present(alertController, animated: true, completion: nil)
-        }
-    }
+               let user = userService.authorization(login: loginText!)
 
-    @objc private func keyboardWillShow(notification: NSNotification) {
-            if let keybordSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-                scrollView.contentInset.bottom = keybordSize.height
-                scrollView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: keybordSize.height, right: 0)
-            }
-    }
+               if user == nil || self.loginDelegate == nil {
+                   self.showErrorAlert()
+                   return
+               }
 
-    @objc private func keyboardWillHide(notification: NSNotification) {
-        scrollView.contentInset.bottom = .zero
-        scrollView.verticalScrollIndicatorInsets = .zero
-    }
+               if self.loginDelegate!.check(login: loginText!, password: passwordText!) == false {
+                   self.showErrorAlert()
+                   return
+               }
 
-}
+               self.coordinator.setUser(user: user!)
+               self.coordinator.start()
+           } else {
+               self.showErrorAlert()
+           }
+       }
 
+       private func showErrorAlert() {
+           let alertController = UIAlertController(
+               title: "Access denied!",
+               message: "Check your login/password field!",
+               preferredStyle: .alert
+           )
+
+           let actionOK = UIAlertAction(
+               title: "OK",
+               style: .default,
+               handler: {(action:UIAlertAction!) in
+                   print("OK button pressed")
+               }
+           )
+
+           alertController.addAction(actionOK)
+
+           self.present(alertController, animated: true, completion: nil)
+       }
+
+       @objc private func keyboardShow(notification: NSNotification) {
+           if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+               scrollView.contentInset.bottom = keyboardSize.height
+               scrollView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
+
+               if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+                   let keyboardRectangle = keyboardFrame.cgRectValue
+                   let keyboardHeight = keyboardRectangle.height
+                   let contentOffset: CGPoint = notification.name == UIResponder.keyboardWillHideNotification ? .zero: CGPoint(x: 0, y: keyboardHeight)
+
+                   self.scrollView.contentOffset = contentOffset
+               }
+           }
+       }
+
+       @objc
+       private func keyboardHide(notification: NSNotification) {
+           scrollView.contentInset.bottom = .zero
+           scrollView.verticalScrollIndicatorInsets = .zero
+       }
+
+    @objc func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+           self.loginTextField.resignFirstResponder()
+           self.passwordTextField.resignFirstResponder()
+           return true
+       }
+   }
 
 extension LogInViewController: UITextFieldDelegate {
-
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        view.endEditing(true)
-        return true
-    }
-
-    func hideKeyboardTapped() {
-        let press: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
-        press.cancelsTouchesInView = false
-        view.addGestureRecognizer(press)
-    }
-
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
+    func addTapGestureToHideKeyboard() {
+        let tapGesture = UITapGestureRecognizer(target: view, action: #selector(view.endEditing))
+        view.addGestureRecognizer(tapGesture)
     }
 }
-

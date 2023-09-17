@@ -7,15 +7,21 @@
 
 import Foundation
 
-protocol FeedModelProtocol: AnyObject {
-    func check(word: String) -> Bool
-}
+final class FeedModel {
 
-class FeedModel: FeedModelProtocol {
+    static let shared = FeedModel()
 
-    let secretWord: String = "Cat"
+    private let secretWord = "Cat"
 
-    func check(word: String) -> Bool {
+
+     init() {}
+
+    func check(word: String?) -> Bool {
+
+        guard let word = word, !word.isEmpty else {
+            return false
+        }
+
         return word == secretWord
     }
 }

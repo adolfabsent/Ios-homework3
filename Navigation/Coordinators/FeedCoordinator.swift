@@ -7,8 +7,25 @@
 
 import UIKit
 
-final class FeedCoordinator {
+class FeedCoordinator: CoordinatorProtocol {
+    var navigationController: UINavigationController
 
-    var navController: UINavigationController?
+    init(navigationController: UINavigationController) {
+        self.navigationController = navigationController
+    }
 
+    func start() {
+        let feedVC = FeedViewController(coordinator: self)
+        feedVC.view.backgroundColor = .white
+        feedVC.tabBarItem = UITabBarItem(title: "Лента", image: UIImage(systemName: "newspaper"), tag: 0)
+
+        navigationController.pushViewController(feedVC, animated: true)
+    }
+
+    func toPostViewController(send post: Post) {
+        let postVC = PostViewController( nibName: nil, bundle: nil)
+        postVC.post = post
+
+        navigationController.pushViewController(postVC, animated: true)
+    }
 }
