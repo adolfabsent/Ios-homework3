@@ -9,7 +9,6 @@ import UIKit
 
 class PhotosTableViewCell: UITableViewCell {
 
-    private let photos = Photo.arrayPhotos()
 
     private lazy var collectionLabel: UILabel = {
         let label = UILabel()
@@ -40,7 +39,7 @@ class PhotosTableViewCell: UITableViewCell {
     func firstPreviewImage(index: Int) -> UIImageView {
         let preview = UIImageView()
         preview.translatesAutoresizingMaskIntoConstraints = false
-        preview.image = photos[index]
+        preview.image = Photos.shared.examples[index]
         preview.contentMode = .scaleAspectFill
         preview.layer.cornerRadius = 6
         preview.clipsToBounds = true

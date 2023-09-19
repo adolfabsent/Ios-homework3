@@ -11,9 +11,9 @@ import iOSIntPackage
 class PhotosViewController: UIViewController {
     
     let photoIdent = "photoCell"
-    private var photos: [UIImage] = []
-    private var imagePublisherFacade: ImagePublisherFacade?
-    
+    private let imageProcessor = ImageProcessor()
+    private var photos = Photos.shared.examples
+
     private lazy var layout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 8
@@ -39,10 +39,36 @@ class PhotosViewController: UIViewController {
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
         setupConstraints()
-        imagePublisherFacade = ImagePublisherFacade()
-        imagePublisherFacade?.addImagesWithTimer(time: 0.5, repeat: 20, userImages: Photo.arrayPhotos())
+
+
+        let startDate = Date.timeIntervalSinceReferenceDate
+                print("Start time --- \(Date.timeIntervalSinceReferenceDate)")
+                imageProcessor.processImagesOnThread(sourceImages: Photos.shared.examples, filter: .posterize, qos: .default ) { [weak self] cgImages in
+                    var result = [UIImage]()
+                    for cgImage in cgImages {
+                        guard let cgImage = cgImage else {
+                            continue
+                        }
+                        result.append(UIImage(cgImage: cgImage))
+                    }
+                    self?.photos = result
+                    DispatchQueue.main.async {
+                        let endDate = Date.timeIntervalSinceReferenceDate
+                        print("End time --- \(Date.timeIntervalSinceReferenceDate)")
+                        print("Result === \(endDate - startDate)")
+                        self?.collectionView.reloadData()
+                    }
+                }
     }
-    
+
+
+// QOS time:
+//default: === 1.3786860704421997
+//background: === 3.9672091007232666
+//userInitiated: === 0.8964539766311646
+//userInteractive: === 0.8805649280548096
+//utility: Result === 3.3349239826202393
+
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: self.view.topAnchor),
@@ -55,15 +81,16 @@ class PhotosViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
-        imagePublisherFacade?.subscribe(self)
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.navigationBar.isHidden = true
-        imagePublisherFacade?.removeSubscription(for: self)
-        imagePublisherFacade?.rechargeImageLibrary()
+
     }
+
+
 }
 
 
@@ -80,20 +107,13 @@ extension PhotosViewController: UICollectionViewDelegateFlowLayout {
 extension PhotosViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return photos.count
+        return Photos.shared.examples.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: photoIdent, for: indexPath) as? PhotosCollectionViewCell else { return UICollectionViewCell()}
-        cell.configCellCollection(photo: photos[indexPath.item])
+        cell.configCellCollection(photo: Photos.shared.examples[indexPath.item])
         return cell
     }
 }
 
-extension PhotosViewController: ImageLibrarySubscriber {
-    
-    func receive(images: [UIImage]) {
-        photos = images
-        collectionView.reloadData()
-    }
-}
