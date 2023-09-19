@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "Revolutionary_Joyce_Better_Contrast.jpg",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "Revolutionary_Joyce_Better_Contrast 1.jpg",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "Revolutionary_Joyce_Better_Contrast 2.jpg",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
