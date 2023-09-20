@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "Vladimir_Nabokov_1973.jpg",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "Vladimir_Nabokov_1973 1.jpg",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "Vladimir_Nabokov_1973 2.jpg",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
