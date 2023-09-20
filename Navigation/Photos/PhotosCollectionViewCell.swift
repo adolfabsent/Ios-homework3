@@ -10,20 +10,23 @@ import  iOSIntPackage
 
 class PhotosCollectionViewCell: UICollectionViewCell {
 
-    var photo: UIImageView = {
+    var photoImageView: UIImageView = {
          let photos = UIImageView()
+         photos.contentMode = .scaleAspectFill
+         photos.layer.cornerRadius = 6
+         photos.clipsToBounds = true
          photos.translatesAutoresizingMaskIntoConstraints = false
          return photos
      }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.contentView.addSubview(photo)
+        self.contentView.addSubview(photoImageView)
         NSLayoutConstraint.activate([
-            photo.topAnchor.constraint(equalTo: contentView.topAnchor),
-            photo.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            photo.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            photo.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            photoImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            photoImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            photoImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            photoImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
     }
 
@@ -32,7 +35,10 @@ class PhotosCollectionViewCell: UICollectionViewCell {
     }
 
     public func configCellCollection(photo: UIImage) {
-           self.photo.image = photo
+           self.photoImageView.image = photo
        }
 }
+
+
+
 
