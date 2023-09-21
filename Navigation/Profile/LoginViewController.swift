@@ -9,6 +9,8 @@ final class LogInViewController: UIViewController {
 
     let coordinator: ProfileCoordinator
 
+    private lazy var password: String = ""
+
     init(coordinator: ProfileCoordinator) {
         self.coordinator = coordinator
         self.loginDelegate = LoginInspector()
@@ -120,6 +122,23 @@ final class LogInViewController: UIViewController {
         return button
     }()
 
+    private lazy var checkPasswordButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Generate Password", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .systemGreen
+        button.layer.cornerRadius = 10
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(self.checkPasswordButtonDidTap), for: .touchUpInside)
+        return button
+    }()
+
+    private let activityIndicator: UIActivityIndicatorView = {
+          let indicator = UIActivityIndicatorView(style: .large)
+          indicator.translatesAutoresizingMaskIntoConstraints = false
+          return indicator
+      }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -130,7 +149,32 @@ final class LogInViewController: UIViewController {
         self.setupLabelAlert()
         loginTextField.delegate = self
         passwordTextField.delegate = self
+        self.setupCheckPasswordButton()
+        self.setupActivityIndicator()
     }
+
+    private func setupCheckPasswordButton() {
+            self.view.addSubview(checkPasswordButton)
+
+            NSLayoutConstraint.activate([
+                self.checkPasswordButton.topAnchor.constraint(equalTo: self.loginPasswordStackView.bottomAnchor, constant: 80),
+                self.checkPasswordButton.leadingAnchor.constraint(equalTo: self.scrollView.leadingAnchor, constant: 16),
+                self.checkPasswordButton.trailingAnchor.constraint(equalTo: self.scrollView.trailingAnchor, constant: -16),
+                self.checkPasswordButton.heightAnchor.constraint(equalToConstant: 50),
+            ])
+        }
+
+        private func setupActivityIndicator() {
+            self.view.addSubview(activityIndicator)
+            activityIndicator.isHidden = true
+
+            NSLayoutConstraint.activate([
+                self.activityIndicator.centerYAnchor.constraint(equalTo: self.passwordTextField.centerYAnchor),
+                self.activityIndicator.centerXAnchor.constraint(equalTo: self.passwordTextField.centerXAnchor),
+                self.activityIndicator.widthAnchor.constraint(equalToConstant: 50),
+                self.activityIndicator.heightAnchor.constraint(equalToConstant: 50),
+            ])
+        }
 
     override func viewWillAppear(_ animated: Bool) {
            super.viewWillAppear(animated)
@@ -160,6 +204,33 @@ final class LogInViewController: UIViewController {
            notificationCenter.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
 
        }
+
+    @objc private func checkPasswordButtonDidTap () {
+    self.passwordTextField.isSecureTextEntry = true
+            let allowCharacters: [String] = String().printable.map { String($0) }
+            self.password = ""
+            while self.password.count < 4 {
+            let indexCharacter = Int.random(in: 0..<allowCharacters.count)
+            self.password += allowCharacters[indexCharacter]
+            }
+
+            self.activityIndicator.isHidden = false
+            self.activityIndicator.startAnimating()
+
+            let brute = BruteForсe()
+            DispatchQueue.global().async { [self] in
+                let startTime = Date().timeIntervalSince1970
+                brute.bruteForce(passwordToUnlock: self.password)
+                print(Date().timeIntervalSince1970 - startTime)
+
+                DispatchQueue.main.async {
+                    self.passwordTextField.text = self.password
+                    self.passwordTextField.isSecureTextEntry = false
+                    self.activityIndicator.isHidden = true
+                    self.activityIndicator.stopAnimating()
+                }
+            }
+        }
 
     private func configureSubviews() {
         view.addSubview(scrollView)

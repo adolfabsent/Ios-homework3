@@ -16,6 +16,7 @@
 		7866C3732A953BFF008F24F6 /* PostExamples.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7866C3712A953B21008F24F6 /* PostExamples.swift */; };
 		7866C3742A953CDD008F24F6 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C11AEE2A84413900FF9FC9 /* Post.swift */; };
 		7872FAD82AB0ECD90044C8B9 /* FeedCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7872FAD72AB0ECD90044C8B9 /* FeedCoordinator.swift */; };
+		78786CA82ABCB15D00FEDA38 /* BruteForce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78786CA72ABCB15D00FEDA38 /* BruteForce.swift */; };
 		787C11122AB2406200A1E7BD /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787C11112AB2406200A1E7BD /* ProfileCoordinator.swift */; };
 		787C11162AB2424A00A1E7BD /* LogInViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787C11152AB2424A00A1E7BD /* LogInViewControllerDelegate.swift */; };
 		7886658A2AB751C3005736A3 /* LoginCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788665892AB751C3005736A3 /* LoginCoordinator.swift */; };
@@ -94,6 +95,7 @@
 		7866C36F2A95290B008F24F6 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		7866C3712A953B21008F24F6 /* PostExamples.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostExamples.swift; sourceTree = "<group>"; };
 		7872FAD72AB0ECD90044C8B9 /* FeedCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCoordinator.swift; sourceTree = "<group>"; };
+		78786CA72ABCB15D00FEDA38 /* BruteForce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BruteForce.swift; sourceTree = "<group>"; };
 		787C11112AB2406200A1E7BD /* ProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinator.swift; sourceTree = "<group>"; };
 		787C11152AB2424A00A1E7BD /* LogInViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewControllerDelegate.swift; sourceTree = "<group>"; };
 		788665892AB751C3005736A3 /* LoginCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCoordinator.swift; sourceTree = "<group>"; };
@@ -275,6 +277,7 @@
 				DDEB965B295B9DB20066CA14 /* ProfileViewController.swift */,
 				7887AC472AA0F18A007E7251 /* Checker.swift */,
 				785EB3892A83D7BC00F752AF /* LoginViewController.swift */,
+				78786CA72ABCB15D00FEDA38 /* BruteForce.swift */,
 				787C11152AB2424A00A1E7BD /* LogInViewControllerDelegate.swift */,
 				7887AC492AA100CA007E7251 /* LoginInspector.swift */,
 			);
@@ -473,6 +476,7 @@
 				7863D6DB2A9DEAB6003AD974 /* UserService.swift in Sources */,
 				DDEB965C295B9DB20066CA14 /* ProfileViewController.swift in Sources */,
 				7866C3742A953CDD008F24F6 /* Post.swift in Sources */,
+				78786CA82ABCB15D00FEDA38 /* BruteForce.swift in Sources */,
 				DD78C41529510685006D31F5 /* PostViewController.swift in Sources */,
 				78BC857D2A68496300C3E9CE /* ProfileHeaderView.swift in Sources */,
 				78900A462AAA4E1500C8D780 /* FeedModel.swift in Sources */,
