@@ -9,6 +9,7 @@ import UIKit
 import iOSIntPackage
 
 class PhotosViewController: UIViewController {
+
     
     let photoIdent = "photoCell"
     private let imageProcessor = ImageProcessor()

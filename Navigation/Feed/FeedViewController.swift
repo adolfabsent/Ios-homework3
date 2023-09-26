@@ -2,6 +2,8 @@ import UIKit
 
 class FeedViewController: UIViewController {
 
+    private var timer: Timer?
+
     var post = Post.init(title: "Мой пост")
 
     struct Post {
@@ -90,13 +92,22 @@ class FeedViewController: UIViewController {
         return label
     }()
 
+    private var changeColorButton: CustomButton {
+        let button = CustomButton(title: "Change background color", titleColor: .white, backgroundColor: .systemIndigo, buttonTap: timerChangeColor)
+        button.layer.cornerRadius = 12
+        button.clipsToBounds = true
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        view.backgroundColor = .systemGray6
         view.addSubview(buttonsStackView)
         buttonsStackView.addArrangedSubview(postButton)
         buttonsStackView.addArrangedSubview(postTwoButton)
         buttonsStackView.addArrangedSubview(guessWordView)
+        buttonsStackView.addArrangedSubview(changeColorButton)
 
         guessWordView.addArrangedSubview(wordTextField)
         guessWordView.addArrangedSubview(checkGuessButton)
@@ -120,6 +131,26 @@ class FeedViewController: UIViewController {
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationItem.title = "Лента"
         self.navigationItem.backButtonTitle = ""
+    }
+
+    @objc func timerChangeColor(sender: UIButton!) {
+        if timer == nil {
+            timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { [weak self] Timer in
+                self?.view.backgroundColor = self?.getRandomColor()
+            })
+        } else {
+            timer?.invalidate()
+            timer = nil 
+        }
+
+    }
+
+     private func getRandomColor() -> UIColor {
+         let red:CGFloat = CGFloat(drand48())
+         let green:CGFloat = CGFloat(drand48())
+         let blue:CGFloat = CGFloat(drand48())
+
+         return UIColor(red:red, green: green, blue: blue, alpha: 1.0)
     }
 
     @objc private func pressPost(sender: UIButton!) {
@@ -169,3 +200,13 @@ extension UIView {
         self.endEditing(true)
     }
 }
+
+extension UIColor {
+    static var random:  UIColor {
+        return  UIColor(red: .random(in: 0...1),
+                     green: .random(in: 0...1),
+                     blue: .random(in: 0...1),
+                        alpha: 1.0)
+    }
+}
+
