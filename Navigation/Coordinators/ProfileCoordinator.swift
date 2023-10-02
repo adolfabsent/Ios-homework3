@@ -31,4 +31,25 @@ class ProfileCoordinator: CoordinatorProtocol {
     func setUser(user: User) {
         self.user = user
     }
+    func showAlert(error: Errors) {
+            var alertMessage = ""
+
+            switch error {
+            case .loginIsEmpty:
+                alertMessage = "Введите логин"
+            case .passIsEmpty:
+                alertMessage = "Введите пароль"
+            case .incorrectLogin:
+                alertMessage = "Введён неверный логин"
+            case .incorrectPass:
+                alertMessage = "Введён неверный пароль"
+            }
+
+            let alertController = UIAlertController(title: "Ошибка!", message: alertMessage, preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+                print("OK")
+            }
+            alertController.addAction(okAction)
+        navigationController.present(alertController, animated: true, completion: nil)
+        }
 }

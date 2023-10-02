@@ -8,10 +8,14 @@
 import Foundation
 
 class LoginInspector: LoginViewControllerDelegate {
-    func check(login: String, password: String) -> Bool {
-        Checker.shared.check(login: login, password: password)
+    func checkLogin(login: String) -> Bool {
+           return Checker.shared.check(login: login, password: nil)
+       }
+
+       func checkPassword(userPassword: String) -> Bool {
+           return Checker.shared.check(login: nil, password: nil)
+       }
     }
-}
 
 protocol LoginFactory {
 

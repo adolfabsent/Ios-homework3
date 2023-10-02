@@ -311,7 +311,7 @@ final class LogInViewController: UIViewController {
                    return
                }
 
-               if self.loginDelegate!.check(login: loginText!, password: passwordText!) == false {
+               if ((loginDelegate?.checkLogin(login: loginTextField.text!))! && (loginDelegate?.checkPassword(userPassword: passwordTextField.text!))!) == false {
                    self.showErrorAlert()
                    return
                }
@@ -320,6 +320,43 @@ final class LogInViewController: UIViewController {
                self.coordinator.start()
            } else {
                self.showErrorAlert()
+           }
+       }
+
+    @objc private func loginButtonPressed() {
+            checkLogin { result in
+                switch result {
+                case .success(let action):
+                    if let mAction = action {
+                        mAction()
+                    }
+                case .failure(.incorrectLogin):
+                    coordinator.showAlert(error: .incorrectLogin)
+                case .failure(.incorrectPass):
+                    coordinator.showAlert(error: .incorrectPass)
+                case .failure(.loginIsEmpty):
+                    coordinator.showAlert(error: .loginIsEmpty)
+                case .failure(.passIsEmpty):
+                    coordinator.showAlert(error: .passIsEmpty)
+                }
+            }
+        }
+
+    private func checkLogin(completion: (Result<(() -> Void)?, Errors>) -> Void) {
+           if loginTextField.text == "" || loginTextField.text == nil {
+               completion(.failure(.loginIsEmpty))
+           }
+
+           if passwordTextField.text == "" || passwordTextField.text == nil {
+               completion(.failure(.passIsEmpty))
+           }
+
+           if ((loginDelegate?.checkLogin(login: loginTextField.text!))! && (loginDelegate?.checkPassword(userPassword: passwordTextField.text!))!) {
+               completion(.success(coordinator.start))
+           } else if !(loginDelegate?.checkLogin(login: loginTextField.text!))! {
+               completion(.failure(.incorrectLogin))
+           } else if !(loginDelegate?.checkPassword(userPassword: passwordTextField.text!))! {
+               completion(.failure(.incorrectPass))
            }
        }
 
