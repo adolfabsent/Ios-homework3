@@ -14,7 +14,7 @@ class FeedCoordinator: CoordinatorProtocol {
         self.navigationController = navigationController
     }
 
-    func start() {
+    func startVC() {
         let feedVC = FeedViewController(coordinator: self)
         feedVC.view.backgroundColor = .white
         feedVC.tabBarItem = UITabBarItem(title: "Лента", image: UIImage(systemName: "newspaper"), tag: 0)

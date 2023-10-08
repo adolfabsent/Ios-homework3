@@ -6,7 +6,8 @@ final class ProfileViewController: UIViewController {
     let user: User?
     let profileViewModel: ProfileViewModel
     let photoCoordinator: PhotoCoordinator
-
+    weak var coordinator: ProfileCoordinator?
+    
        static let headerIdent = "header"
        static let photoIdent = "photo"
        static let postIdent = "post"

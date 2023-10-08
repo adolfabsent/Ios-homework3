@@ -7,7 +7,7 @@ final class LogInViewController: UIViewController {
 
     public var loginDelegate: LoginViewControllerDelegate?
 
-    let coordinator: ProfileCoordinator
+    let coordinator: ProfileCoordinator?
 
     private lazy var password: String = ""
 
@@ -89,6 +89,7 @@ final class LogInViewController: UIViewController {
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: textField.frame.height))
         textField.leftViewMode = .always
         textField.autocapitalizationType = .none
+        textField.isUserInteractionEnabled = true
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -117,7 +118,7 @@ final class LogInViewController: UIViewController {
         button.setBackgroundImage(UIImage(named: "blue_pixel"), for: .normal)
         button.layer.cornerRadius = 10
         button.clipsToBounds = true
-        button.addTarget(self, action: #selector(self.buttonClicked), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.loginButtonPressed), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -293,7 +294,7 @@ final class LogInViewController: UIViewController {
         ])
     }
 
-    @objc private func buttonClicked() {
+    /** @objc private func buttonClicked() {
     let loginText = self.loginTextField.text
            let passwordText = self.passwordTextField.text
 
@@ -311,19 +312,36 @@ final class LogInViewController: UIViewController {
                    return
                }
 
-               if ((loginDelegate?.checkLogin(login: loginTextField.text!))! && (loginDelegate?.checkPassword(userPassword: passwordTextField.text!))!) == false {
+               if ((loginDelegate?.checkLogin(login: loginTextField.text!))! && (loginDelegate?.checkPassword(password: passwordTextField.text!))!) == false {
                    self.showErrorAlert()
                    return
                }
 
                self.coordinator.setUser(user: user!)
-               self.coordinator.start()
+               self.coordinator.startVC()
            } else {
                self.showErrorAlert()
            }
-       }
+} */
 
     @objc private func loginButtonPressed() {
+        let loginText = self.loginTextField.text
+               let passwordText = self.passwordTextField.text
+
+        if loginText != "" && passwordText != "" {
+#if DEBUG
+            let userService = TestUserService()
+#else
+            let userService = CurrentUserService()
+#endif
+            
+            let user = userService.authorization(login: loginText!)
+
+            self.coordinator?.setUser(user: user!)
+            self.coordinator?.startVC()
+
+        }
+
             checkLogin { result in
                 switch result {
                 case .success(let action):
@@ -331,18 +349,19 @@ final class LogInViewController: UIViewController {
                         mAction()
                     }
                 case .failure(.incorrectLogin):
-                    coordinator.showAlert(error: .incorrectLogin)
+                    coordinator?.showAlert(error: .incorrectLogin)
                 case .failure(.incorrectPass):
-                    coordinator.showAlert(error: .incorrectPass)
+                    coordinator?.showAlert(error: .incorrectPass)
                 case .failure(.loginIsEmpty):
-                    coordinator.showAlert(error: .loginIsEmpty)
+                    coordinator?.showAlert(error: .loginIsEmpty)
                 case .failure(.passIsEmpty):
-                    coordinator.showAlert(error: .passIsEmpty)
+                    coordinator?.showAlert(error: .passIsEmpty)
                 }
             }
         }
 
     private func checkLogin(completion: (Result<(() -> Void)?, Errors>) -> Void) {
+
            if loginTextField.text == "" || loginTextField.text == nil {
                completion(.failure(.loginIsEmpty))
            }
@@ -351,34 +370,15 @@ final class LogInViewController: UIViewController {
                completion(.failure(.passIsEmpty))
            }
 
-           if ((loginDelegate?.checkLogin(login: loginTextField.text!))! && (loginDelegate?.checkPassword(userPassword: passwordTextField.text!))!) {
-               completion(.success(coordinator.start))
+           if loginTextField.text == "Raymond" && passwordTextField.text == "Raymond11" {
+               completion(.success(coordinator?.startVC))
            } else if !(loginDelegate?.checkLogin(login: loginTextField.text!))! {
                completion(.failure(.incorrectLogin))
-           } else if !(loginDelegate?.checkPassword(userPassword: passwordTextField.text!))! {
+           } else if !(loginDelegate?.checkPassword(password: passwordTextField.text!))! {
                completion(.failure(.incorrectPass))
            }
        }
 
-       private func showErrorAlert() {
-           let alertController = UIAlertController(
-               title: "Access denied!",
-               message: "Check your login/password field!",
-               preferredStyle: .alert
-           )
-
-           let actionOK = UIAlertAction(
-               title: "OK",
-               style: .default,
-               handler: {(action:UIAlertAction!) in
-                   print("OK button pressed")
-               }
-           )
-
-           alertController.addAction(actionOK)
-
-           self.present(alertController, animated: true, completion: nil)
-       }
 
        @objc private func keyboardShow(notification: NSNotification) {
            if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {

@@ -14,7 +14,7 @@ class LoginCoordinator: CoordinatorProtocol {
         self.navigationController = navigationController
     }
 
-    func start() {
+    func startVC() {
         let profileCoordinator = ProfileCoordinator(navigationController: self.navigationController)
 
         let loginVC = LogInViewController(coordinator: profileCoordinator)

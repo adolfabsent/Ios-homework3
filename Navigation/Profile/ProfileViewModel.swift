@@ -19,14 +19,15 @@ class ProfileViewModel {
         self.user = user
 
         self.setUser()
-        //self.setPosts()
+        self.setPosts()
     }
 
     func setUser() {
         self.profileHeaderView.setUser(avatarImage: user.avatar!, fullName: user.fullName, status: user.status)
     }
 
-   // func setPosts() {
-     //   postsData = postExamples
-  //  }
+    func setPosts() {
+        postsData = postExamples
+
+    }
 }

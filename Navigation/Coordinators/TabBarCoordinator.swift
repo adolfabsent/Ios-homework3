@@ -16,18 +16,19 @@ class TabBarCoordinator: TabBarCoordinatorProtocol {
 
     init(tabBarController: UITabBarController) {
         self.tabBarController = tabBarController
+
     }
 
     func startApplication() -> UIViewController {
         let navFeedController = UINavigationController()
         coordinatorNavFeed = FeedCoordinator(navigationController: navFeedController)
-        coordinatorNavFeed?.start()
+        coordinatorNavFeed?.startVC()
         let feed = coordinatorNavFeed!
 
         let navProfileController = UINavigationController()
 
         loginCoordinator = LoginCoordinator(navigationController: navProfileController)
-        loginCoordinator?.start()
+        loginCoordinator?.startVC()
         let profile = loginCoordinator!
 
         tabBarController.viewControllers = [feed.navigationController, profile.navigationController]
