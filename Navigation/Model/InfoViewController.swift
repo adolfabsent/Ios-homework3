@@ -1,7 +1,7 @@
 import UIKit
 
 class InfoViewController: UIViewController {
-
+    
     var button = UIButton(frame: CGRectMake(150, 240, 95, 95))
     
     override func viewDidLoad() {
@@ -37,5 +37,5 @@ class InfoViewController: UIViewController {
         present(alert, animated: true)
         
     }
-
+    
 }

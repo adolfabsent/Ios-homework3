@@ -4,7 +4,7 @@ import StorageService
 class PostTableViewCell: UITableViewCell {
     
     private var viewCounter = 0
-
+    
     
     var postAuthor: UILabel = {
         let label = UILabel()

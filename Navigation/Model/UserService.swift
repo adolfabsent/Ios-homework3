@@ -12,7 +12,7 @@ class User {
     var fullName: String
     var avatar: UIImage?
     var status: String
-
+    
     init(login: String, name: String, avatar: UIImage?, status: String) {
         self.login = login
         self.fullName = name
@@ -26,7 +26,7 @@ protocol UserService {
 }
 
 class CurrentUserService: UserService {
-
+    
     let user = User(
         login: "Raymond",
         name: "Cat Raymond",
@@ -48,10 +48,10 @@ class TestUserService: UserService {
     func authorization(login: String) -> User? {
         return login == user.login ? user : nil
     }
-
+    
 }
 
-    let currentUserService = CurrentUserService()
-    let testUserService = TestUserService()
+let currentUserService = CurrentUserService()
+let testUserService = TestUserService()
 
 

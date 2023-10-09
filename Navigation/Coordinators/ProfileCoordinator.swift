@@ -22,7 +22,7 @@ class ProfileCoordinator: CoordinatorProtocol {
 
         let profileVC = ProfileViewController(
             user: user!, photoCoordinator: photoCoordinator,
-             profileViewModel: profileViewModel
+            profileViewModel: profileViewModel
         )
 
         navigationController.pushViewController(profileVC, animated: true)
@@ -32,25 +32,25 @@ class ProfileCoordinator: CoordinatorProtocol {
         self.user = user
     }
 
-    func showAlert(error: Errors) {
-          var alertMessage = ""
+    func showAlert(error: loginError) {
+        var alertMessage = ""
 
-          switch error {
-          case .loginIsEmpty:
-              alertMessage = "Введите логин"
-          case .passIsEmpty:
-              alertMessage = "Введите пароль"
-          case .incorrectLogin:
-              alertMessage = "Введён неверный логин"
-          case .incorrectPass:
-              alertMessage = "Введён неверный пароль"
-          }
+        switch error {
+        case .loginIsEmpty:
+            alertMessage = "Введите логин"
+        case .passIsEmpty:
+            alertMessage = "Введите пароль"
+        case .incorrectLogin:
+            alertMessage = "Введён неверный логин"
+        case .incorrectPass:
+            alertMessage = "Введён неверный пароль"
+        }
 
-          let alertController = UIAlertController(title: "Ошибка!", message: alertMessage, preferredStyle: .alert)
-          let okAction = UIAlertAction(title: "OK", style: .default) { _ in
-              print("OK")
-          }
-          alertController.addAction(okAction)
-          navigationController.present(alertController, animated: true, completion: nil)
-      }
+        let alertController = UIAlertController(title: "Ошибка!", message: alertMessage, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+            print("OK")
+        }
+        alertController.addAction(okAction)
+        navigationController.present(alertController, animated: true, completion: nil)
+    }
 }

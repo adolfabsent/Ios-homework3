@@ -30,7 +30,7 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     
     private func setupNameLabel() {
         fullNameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -102,16 +102,16 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
             setStatusButton.heightAnchor.constraint(equalToConstant: 48),
         ])
     }
-
+    
     func setUser(avatarImage: UIImage, fullName: String, status: String) {
-            avatarImageView.image = avatarImage
-            fullNameLabel.text = fullName
-            statusLabel.text = status
-        }
+        avatarImageView.image = avatarImage
+        fullNameLabel.text = fullName
+        statusLabel.text = status
+    }
     
     private func setupAvatarImage() {
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
-       // avatarImageView.image = UIImage(named: "cat")
+        // avatarImageView.image = UIImage(named: "cat")
         avatarImageView.layer.cornerRadius = 64
         avatarImageView.layer.borderWidth = 3
         avatarImageView.layer.borderColor = UIColor.white.cgColor
@@ -149,10 +149,10 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
     }
     
     public func setupUser(user: User) {
-           fullNameLabel.text = user.fullName
-           statusLabel.text = user.status
-           avatarImageView.image = user.avatar
-       }
+        fullNameLabel.text = user.fullName
+        statusLabel.text = user.status
+        avatarImageView.image = user.avatar
+    }
     
     @objc private func statusTextChanged(_ textField: UITextField) {
         statusText = textField.text ?? ""
@@ -202,10 +202,10 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
     }
 }
 
-  extension ProfileHeaderView: UITextFieldDelegate {
-
-      func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-          textField.resignFirstResponder()
-          return true
-      }
-  }
+extension ProfileHeaderView: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+}

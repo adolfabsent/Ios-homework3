@@ -2,39 +2,39 @@ import UIKit
 
 
 final class LogInViewController: UIViewController {
-
+    
     private let notificationCenter = NotificationCenter.default
-
+    
     public var loginDelegate: LoginViewControllerDelegate?
-
+    
     let coordinator: ProfileCoordinator?
-
+    
     private lazy var password: String = ""
-
+    
     init(coordinator: ProfileCoordinator) {
         self.coordinator = coordinator
         self.loginDelegate = LoginInspector()
         super.init(nibName: nil, bundle: nil)
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.backgroundColor = .white
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         return scrollView
     }()
-
+    
     private lazy var contentView: UIView = {
         let contentView = UIView()
         contentView.backgroundColor = .white
         contentView.translatesAutoresizingMaskIntoConstraints = false
         return contentView
     }()
-
+    
     private lazy var logoImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "logoVK"))
         imageView.clipsToBounds = true
@@ -42,7 +42,7 @@ final class LogInViewController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-
+    
     private lazy var labelAlert: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
@@ -56,13 +56,13 @@ final class LogInViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-
+    
     let separatingLine: UIView = {
-            let separatingLine = UIView()
-            separatingLine.backgroundColor = .lightGray
-            return separatingLine
-        }()
-
+        let separatingLine = UIView()
+        separatingLine.backgroundColor = .lightGray
+        return separatingLine
+    }()
+    
     private lazy var loginPasswordStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -75,7 +75,7 @@ final class LogInViewController: UIViewController {
         stackView.layer.masksToBounds = true
         return stackView
     }()
-
+    
     private lazy var loginTextField: UITextField = {
         let textField = UITextField()
         textField.layer.cornerRadius = 10
@@ -93,7 +93,7 @@ final class LogInViewController: UIViewController {
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
-
+    
     private lazy var passwordTextField: UITextField = {
         let textField = UITextField()
         textField.layer.cornerRadius = 10
@@ -111,7 +111,7 @@ final class LogInViewController: UIViewController {
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
-
+    
     private lazy var logInButton: UIButton = {
         let button = UIButton()
         button.setTitle("Log In", for: .normal)
@@ -122,7 +122,7 @@ final class LogInViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-
+    
     private lazy var checkPasswordButton: UIButton = {
         let button = UIButton()
         button.setTitle("Generate Password", for: .normal)
@@ -133,18 +133,18 @@ final class LogInViewController: UIViewController {
         button.addTarget(self, action: #selector(self.checkPasswordButtonDidTap), for: .touchUpInside)
         return button
     }()
-
+    
     private let activityIndicator: UIActivityIndicatorView = {
-          let indicator = UIActivityIndicatorView(style: .large)
-          indicator.translatesAutoresizingMaskIntoConstraints = false
-          return indicator
-      }()
-
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        return indicator
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         navigationController?.navigationBar.isHidden = true
-               navigationController?.setNavigationBarHidden(true, animated: true)
+        navigationController?.setNavigationBarHidden(true, animated: true)
         self.configureSubviews()
         self.setupConstraints()
         self.setupLabelAlert()
@@ -153,86 +153,86 @@ final class LogInViewController: UIViewController {
         self.setupCheckPasswordButton()
         self.setupActivityIndicator()
     }
-
+    
     private func setupCheckPasswordButton() {
-            self.view.addSubview(checkPasswordButton)
-
-            NSLayoutConstraint.activate([
-                self.checkPasswordButton.topAnchor.constraint(equalTo: self.loginPasswordStackView.bottomAnchor, constant: 80),
-                self.checkPasswordButton.leadingAnchor.constraint(equalTo: self.scrollView.leadingAnchor, constant: 16),
-                self.checkPasswordButton.trailingAnchor.constraint(equalTo: self.scrollView.trailingAnchor, constant: -16),
-                self.checkPasswordButton.heightAnchor.constraint(equalToConstant: 50),
-            ])
-        }
-
-        private func setupActivityIndicator() {
-            self.view.addSubview(activityIndicator)
-            activityIndicator.isHidden = true
-
-            NSLayoutConstraint.activate([
-                self.activityIndicator.centerYAnchor.constraint(equalTo: self.passwordTextField.centerYAnchor),
-                self.activityIndicator.centerXAnchor.constraint(equalTo: self.passwordTextField.centerXAnchor),
-                self.activityIndicator.widthAnchor.constraint(equalToConstant: 50),
-                self.activityIndicator.heightAnchor.constraint(equalToConstant: 50),
-            ])
-        }
-
+        self.view.addSubview(checkPasswordButton)
+        
+        NSLayoutConstraint.activate([
+            self.checkPasswordButton.topAnchor.constraint(equalTo: self.loginPasswordStackView.bottomAnchor, constant: 80),
+            self.checkPasswordButton.leadingAnchor.constraint(equalTo: self.scrollView.leadingAnchor, constant: 16),
+            self.checkPasswordButton.trailingAnchor.constraint(equalTo: self.scrollView.trailingAnchor, constant: -16),
+            self.checkPasswordButton.heightAnchor.constraint(equalToConstant: 50),
+        ])
+    }
+    
+    private func setupActivityIndicator() {
+        self.view.addSubview(activityIndicator)
+        activityIndicator.isHidden = true
+        
+        NSLayoutConstraint.activate([
+            self.activityIndicator.centerYAnchor.constraint(equalTo: self.passwordTextField.centerYAnchor),
+            self.activityIndicator.centerXAnchor.constraint(equalTo: self.passwordTextField.centerXAnchor),
+            self.activityIndicator.widthAnchor.constraint(equalToConstant: 50),
+            self.activityIndicator.heightAnchor.constraint(equalToConstant: 50),
+        ])
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
-           super.viewWillAppear(animated)
-           self.navigationController?.navigationBar.isHidden = true
-           let notificationCenter = NotificationCenter.default
-           notificationCenter.addObserver(
-               self,
-               selector: #selector(keyboardShow),
-               name: UIResponder.keyboardWillShowNotification,
-               object: nil
-           )
-
-           notificationCenter.addObserver(
-               self,
-               selector: #selector(keyboardHide),
-               name: UIResponder.keyboardWillHideNotification,
-               object: nil
-           )
-
-           self.addTapGestureToHideKeyboard()
-       }
-
-       override func viewDidDisappear(_ animated: Bool) {
-           super.viewDidDisappear(animated)
-           let notificationCenter = NotificationCenter.default
-           notificationCenter.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-           notificationCenter.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-
-       }
-
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.isHidden = true
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(keyboardShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(keyboardHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+        
+        self.addTapGestureToHideKeyboard()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        notificationCenter.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+    }
+    
     @objc private func checkPasswordButtonDidTap () {
-    self.passwordTextField.isSecureTextEntry = true
-            let allowCharacters: [String] = String().printable.map { String($0) }
-            self.password = ""
-            while self.password.count < 4 {
+        self.passwordTextField.isSecureTextEntry = true
+        let allowCharacters: [String] = String().printable.map { String($0) }
+        self.password = ""
+        while self.password.count < 4 {
             let indexCharacter = Int.random(in: 0..<allowCharacters.count)
             self.password += allowCharacters[indexCharacter]
-            }
-
-            self.activityIndicator.isHidden = false
-            self.activityIndicator.startAnimating()
-
-            let brute = BruteForсe()
-            DispatchQueue.global().async { [self] in
-                let startTime = Date().timeIntervalSince1970
-                brute.bruteForce(passwordToUnlock: self.password)
-                print(Date().timeIntervalSince1970 - startTime)
-
-                DispatchQueue.main.async {
-                    self.passwordTextField.text = self.password
-                    self.passwordTextField.isSecureTextEntry = false
-                    self.activityIndicator.isHidden = true
-                    self.activityIndicator.stopAnimating()
-                }
+        }
+        
+        self.activityIndicator.isHidden = false
+        self.activityIndicator.startAnimating()
+        
+        let brute = BruteForсe()
+        DispatchQueue.global().async { [self] in
+            let startTime = Date().timeIntervalSince1970
+            brute.bruteForce(passwordToUnlock: self.password)
+            print(Date().timeIntervalSince1970 - startTime)
+            
+            DispatchQueue.main.async {
+                self.passwordTextField.text = self.password
+                self.passwordTextField.isSecureTextEntry = false
+                self.activityIndicator.isHidden = true
+                self.activityIndicator.stopAnimating()
             }
         }
-
+    }
+    
     private func configureSubviews() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
@@ -293,41 +293,11 @@ final class LogInViewController: UIViewController {
             separatingLine.topAnchor.constraint(equalTo: loginTextField.bottomAnchor),
         ])
     }
-
-    /** @objc private func buttonClicked() {
-    let loginText = self.loginTextField.text
-           let passwordText = self.passwordTextField.text
-
-           if loginText != "" && passwordText != "" {
-               #if DEBUG
-                   let userService = TestUserService()
-               #else
-                   let userService = CurrentUserService()
-               #endif
-
-               let user = userService.authorization(login: loginText!)
-
-               if user == nil || self.loginDelegate == nil {
-                   self.showErrorAlert()
-                   return
-               }
-
-               if ((loginDelegate?.checkLogin(login: loginTextField.text!))! && (loginDelegate?.checkPassword(password: passwordTextField.text!))!) == false {
-                   self.showErrorAlert()
-                   return
-               }
-
-               self.coordinator.setUser(user: user!)
-               self.coordinator.startVC()
-           } else {
-               self.showErrorAlert()
-           }
-} */
-
+    
     @objc private func loginButtonPressed() {
         let loginText = self.loginTextField.text
-               let passwordText = self.passwordTextField.text
-
+        let passwordText = self.passwordTextField.text
+        
         if loginText != "" && passwordText != "" {
 #if DEBUG
             let userService = TestUserService()
@@ -336,77 +306,77 @@ final class LogInViewController: UIViewController {
 #endif
             
             let user = userService.authorization(login: loginText!)
-
+            
             self.coordinator?.setUser(user: user!)
             self.coordinator?.startVC()
-
+            
         }
-
-            checkLogin { result in
-                switch result {
-                case .success(let action):
-                    if let mAction = action {
-                        mAction()
-                    }
-                case .failure(.incorrectLogin):
-                    coordinator?.showAlert(error: .incorrectLogin)
-                case .failure(.incorrectPass):
-                    coordinator?.showAlert(error: .incorrectPass)
-                case .failure(.loginIsEmpty):
-                    coordinator?.showAlert(error: .loginIsEmpty)
-                case .failure(.passIsEmpty):
-                    coordinator?.showAlert(error: .passIsEmpty)
+        
+        checkLogin { result in
+            switch result {
+            case .success(let action):
+                if let mAction = action {
+                    mAction()
                 }
+            case .failure(.incorrectLogin):
+                coordinator?.showAlert(error: .incorrectLogin)
+            case .failure(.incorrectPass):
+                coordinator?.showAlert(error: .incorrectPass)
+            case .failure(.loginIsEmpty):
+                coordinator?.showAlert(error: .loginIsEmpty)
+            case .failure(.passIsEmpty):
+                coordinator?.showAlert(error: .passIsEmpty)
             }
         }
-
-    private func checkLogin(completion: (Result<(() -> Void)?, Errors>) -> Void) {
-
-           if loginTextField.text == "" || loginTextField.text == nil {
-               completion(.failure(.loginIsEmpty))
-           }
-
-           if passwordTextField.text == "" || passwordTextField.text == nil {
-               completion(.failure(.passIsEmpty))
-           }
-
-           if loginTextField.text == "Raymond" && passwordTextField.text == "Raymond11" {
-               completion(.success(coordinator?.startVC))
-           } else if !(loginDelegate?.checkLogin(login: loginTextField.text!))! {
-               completion(.failure(.incorrectLogin))
-           } else if !(loginDelegate?.checkPassword(password: passwordTextField.text!))! {
-               completion(.failure(.incorrectPass))
-           }
-       }
-
-
-       @objc private func keyboardShow(notification: NSNotification) {
-           if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-               scrollView.contentInset.bottom = keyboardSize.height
-               scrollView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
-
-               if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-                   let keyboardRectangle = keyboardFrame.cgRectValue
-                   let keyboardHeight = keyboardRectangle.height
-                   let contentOffset: CGPoint = notification.name == UIResponder.keyboardWillHideNotification ? .zero: CGPoint(x: 0, y: keyboardHeight)
-
-                   self.scrollView.contentOffset = contentOffset
-               }
-           }
-       }
-
-       @objc
-       private func keyboardHide(notification: NSNotification) {
-           scrollView.contentInset.bottom = .zero
-           scrollView.verticalScrollIndicatorInsets = .zero
-       }
-
+    }
+    
+    private func checkLogin(completion: (Result<(() -> Void)?, loginError>) -> Void) {
+        
+        if loginTextField.text == "" || loginTextField.text == nil {
+            completion(.failure(.loginIsEmpty))
+        }
+        
+        if passwordTextField.text == "" || passwordTextField.text == nil {
+            completion(.failure(.passIsEmpty))
+        }
+        
+        if loginTextField.text == "Raymond" && passwordTextField.text == "Raymond11" {
+            completion(.success(coordinator?.startVC))
+        } else if !(loginDelegate?.checkLogin(login: loginTextField.text!))! {
+            completion(.failure(.incorrectLogin))
+        } else if !(loginDelegate?.checkPassword(password: passwordTextField.text!))! {
+            completion(.failure(.incorrectPass))
+        }
+    }
+    
+    
+    @objc private func keyboardShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            scrollView.contentInset.bottom = keyboardSize.height
+            scrollView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
+            
+            if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+                let keyboardRectangle = keyboardFrame.cgRectValue
+                let keyboardHeight = keyboardRectangle.height
+                let contentOffset: CGPoint = notification.name == UIResponder.keyboardWillHideNotification ? .zero: CGPoint(x: 0, y: keyboardHeight)
+                
+                self.scrollView.contentOffset = contentOffset
+            }
+        }
+    }
+    
+    @objc
+    private func keyboardHide(notification: NSNotification) {
+        scrollView.contentInset.bottom = .zero
+        scrollView.verticalScrollIndicatorInsets = .zero
+    }
+    
     @objc func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-           self.loginTextField.resignFirstResponder()
-           self.passwordTextField.resignFirstResponder()
-           return true
-       }
-   }
+        self.loginTextField.resignFirstResponder()
+        self.passwordTextField.resignFirstResponder()
+        return true
+    }
+}
 
 extension LogInViewController: UITextFieldDelegate {
     func addTapGestureToHideKeyboard() {

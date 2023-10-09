@@ -7,9 +7,15 @@
 
 import Foundation
 
-enum Errors: Error {
+enum loginError: Error {
     case incorrectLogin
     case incorrectPass
     case loginIsEmpty
     case passIsEmpty
+}
+
+enum feedError: Error {
+    case unauthorized
+    case notFound
+    case isEmpty
 }

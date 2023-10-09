@@ -8,20 +8,23 @@
 import Foundation
 
 final class FeedModel {
-
+    
     static let shared = FeedModel()
-
-    private let secretWord = "Cat"
-
-
-     init() {}
-
-    func check(word: String?) -> Bool {
-
-        guard let word = word, !word.isEmpty else {
-            return false
+    
+    var secretWord = "Cat"
+    
+    
+    init() {}
+    
+    func check(word: String) throws -> Bool {
+        if secretWord == word {
+            return true
+        } else if word == "" {
+            throw feedError.isEmpty
+        } else if secretWord != word {
+            throw feedError.unauthorized
+        } else {
+            throw feedError.notFound
         }
-
-        return word == secretWord
     }
 }

@@ -8,15 +8,15 @@
 import UIKit
 
 final class Photos {
-
-static let shared = Photos()
-let examples: [UIImage]
-
+    
+    static let shared = Photos()
+    let examples: [UIImage]
+    
     init() {
-    var photos = [UIImage]()
-     for i in 1...20 { photos.append((UIImage(named: "\(i)") ?? UIImage())) }
+        var photos = [UIImage]()
+        for i in 1...20 { photos.append((UIImage(named: "\(i)") ?? UIImage())) }
         
-     examples = photos.shuffled()
- }
+        examples = photos.shuffled()
+    }
 }
 
