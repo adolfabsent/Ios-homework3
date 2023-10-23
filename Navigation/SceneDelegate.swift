@@ -1,61 +1,43 @@
-//
-//  SceneDelegate.swift
-//  Navigation
-//
-//  Created by Слава Орлов on 19.12.2022.
-//
-
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
+    var coordinator: TabBarCoordinatorProtocol?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        
         guard let scene = (scene as? UIWindowScene) else { return }
-        
-        let window = UIWindow(windowScene: scene)
-        
-        let feedViewController = FeedViewController()
 
-                let profileViewController = ProfileViewContoller()
-                profileViewController.title = "Profile"
-                profileViewController.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.circle"), tag: 1)
-
-        let postViewController = PostViewController()
-        
-        let usersNavigationController = UINavigationController(rootViewController: feedViewController)
-        let profileNavigationController = UINavigationController(rootViewController: profileViewController)
-        
         let tabBarController = UITabBarController()
-        
-        tabBarController.viewControllers = [usersNavigationController, profileNavigationController]
+        coordinator = TabBarCoordinator(tabBarController: tabBarController)
 
-        usersNavigationController.tabBarItem.title = "Users"
-        usersNavigationController.tabBarItem.image = UIImage(systemName: "person.2")
-        
-        profileNavigationController.tabBarItem.title = "Profile"
-        profileNavigationController.tabBarItem.image = UIImage(systemName: "person.crop.circle")
-        
-        postViewController.navigationItem.rightBarButtonItem?.title = "INFO"
-        
-        
-        window.rootViewController = tabBarController
-        window.makeKeyAndVisible()
-        
-        self.window = window
-        
-        
+        window = UIWindow(windowScene: scene)
+        window?.makeKeyAndVisible()
+        window?.rootViewController = coordinator?.startApplication()
+        downloadData()
+
     }
 
-    func sceneDidDisconnect(_ scene: UIScene) {
-        // Called as the scene is being released by the system.
-        // This occurs shortly after the scene enters the background, or when its session is discarded.
-        // Release any resources associated with this scene that can be re-created the next time the scene connects.
-        // The scene may re-connect later, as its session was not necessarily discarded (see `application:didDiscardSceneSessions` instead).
+    private func downloadData() {
+        guard let configuration = AppConfiguration.getArrayURL().randomElement() else { return }
+
+        NetworkService.fetchData(with: configuration) { result in
+            switch result {
+            case .success(let data):
+                let dataString = String(data: data, encoding: .utf8)
+                print("--------- Data ---------")
+                print(dataString as Any)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
+}
+
+
+
+func sceneDidDisconnect(_ scene: UIScene) {
+
 
     func sceneDidBecomeActive(_ scene: UIScene) {
         // Called when the scene has moved from an inactive state to an active state.
@@ -80,4 +62,3 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
 }
-
