@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7811BEB42AE6A68400F927A7 /* PlanetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7811BEB32AE6A68400F927A7 /* PlanetModel.swift */; };
+		7811BEB62AE6A6D700F927A7 /* InfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7811BEB52AE6A6D700F927A7 /* InfoModel.swift */; };
 		781AE39E2AA79EA70028FC6E /* iOSIntPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 781AE39D2AA79EA70028FC6E /* iOSIntPackage */; };
 		782260612A8BBE0800AA8E44 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 782260602A8BBE0800AA8E44 /* Assets.xcassets */; };
 		785EB38A2A83D7BC00F752AF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785EB3892A83D7BC00F752AF /* LoginViewController.swift */; };
@@ -91,6 +93,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7811BEB32AE6A68400F927A7 /* PlanetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetModel.swift; sourceTree = "<group>"; };
+		7811BEB52AE6A6D700F927A7 /* InfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoModel.swift; sourceTree = "<group>"; };
 		782260602A8BBE0800AA8E44 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		785EB3892A83D7BC00F752AF /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		7863D6DA2A9DEAB6003AD974 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
@@ -164,6 +168,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7811BEB22AE6A64000F927A7 /* Info */ = {
+			isa = PBXGroup;
+			children = (
+				DD78C4182952535F006D31F5 /* InfoViewController.swift */,
+				7811BEB32AE6A68400F927A7 /* PlanetModel.swift */,
+				7811BEB52AE6A6D700F927A7 /* InfoModel.swift */,
+			);
+			path = Info;
+			sourceTree = "<group>";
+		};
 		7872FAD62AB0ECBB0044C8B9 /* Coordinators */ = {
 			isa = PBXGroup;
 			children = (
@@ -189,7 +203,6 @@
 				78900A432AAA46D000C8D780 /* CustomButton.swift */,
 				7866C3712A953B21008F24F6 /* PostExamples.swift */,
 				78C11AEE2A84413900FF9FC9 /* Post.swift */,
-				DD78C4182952535F006D31F5 /* InfoViewController.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -216,6 +229,7 @@
 			children = (
 				DD78C41029510667006D31F5 /* FeedViewController.swift */,
 				78900A452AAA4E1500C8D780 /* FeedModel.swift */,
+				7811BEB22AE6A64000F927A7 /* Info */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -462,6 +476,7 @@
 				788665902AB7530B005736A3 /* TabBarCoordinator.swift in Sources */,
 				7887AC482AA0F18A007E7251 /* Checker.swift in Sources */,
 				7886F8B32A8BE730006FFCFA /* PhotosCollectionViewCell.swift in Sources */,
+				7811BEB42AE6A68400F927A7 /* PlanetModel.swift in Sources */,
 				7886658C2AB75205005736A3 /* CoordinatorProtocol.swift in Sources */,
 				7886F8B12A8BE4C8006FFCFA /* PhotosViewController.swift in Sources */,
 				7886F8B72A8BFA0B006FFCFA /* PhotoExamples.swift in Sources */,
@@ -490,6 +505,7 @@
 				7866C3742A953CDD008F24F6 /* Post.swift in Sources */,
 				78786CA82ABCB15D00FEDA38 /* BruteForce.swift in Sources */,
 				DD78C41529510685006D31F5 /* PostViewController.swift in Sources */,
+				7811BEB62AE6A6D700F927A7 /* InfoModel.swift in Sources */,
 				78BC857D2A68496300C3E9CE /* ProfileHeaderView.swift in Sources */,
 				78900A462AAA4E1500C8D780 /* FeedModel.swift in Sources */,
 			);
